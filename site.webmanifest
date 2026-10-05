@@ -1,0 +1,16 @@
+{
+  "name": "Packages",
+  "short_name": "packages",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fbfbfc",
+  "theme_color": "#111014",
+  "icons": [
+    {
+      "src": "/assets/favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any",
+      "purpose": "any"
+    }
+  ]
+}

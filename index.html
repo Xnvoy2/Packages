@@ -1,0 +1,368 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Packages — launch your package onchain</title>
+<meta name="description" content="Packages gives existing npm packages a verified public identity on Solana, connecting their publishers, source code, release history and contributors.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#111014">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="/assets/config.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">skip to content</a>
+<div class="atmosphere">
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a class="nav__brand" href="/index.html"><svg class="nav__mark" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect width="24" height="24" rx="7" fill="url(#mk)"/>
+      <path d="M12 6.4 17.8 9.5v5.9L12 18.5 6.2 15.4V9.5z" stroke="#fff" stroke-width="1.45" stroke-linejoin="round"/>
+      <path d="M6.2 9.5 12 12.6l5.8-3.1M12 12.6v5.9" stroke="#fff" stroke-width="1.45" stroke-linejoin="round"/>
+      <defs><linearGradient id="mk" x1="0" y1="0" x2="24" y2="24">
+        <stop stop-color="#7C4DFF"/><stop offset="1" stop-color="#C04DFF"/>
+      </linearGradient></defs>
+    </svg><span>packages</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="explore.html">packages</a>
+      <a class="nav__link" href="activity.html">activity</a>
+      <a class="nav__link" href="connect.html">launch</a>
+      <a class="nav__link" href="how-it-works.html">how it works</a>
+    </nav>
+    <span class="nav__spacer"></span>
+    <a class="nav__link nav__link--quiet" href="/dashboard.html" data-auth-only hidden>dashboard</a>
+    <a class="btn btn--sm btn--ink" href="/connect.html" data-nav-cta>launch a package</a>
+  </div>
+</header>
+<main id="main" tabindex="-1">
+<!-- ============================================================ hero -- -->
+<section class="hero">
+  <div class="world" aria-hidden="true">
+
+    <div class="world__panel" data-slot="profile">
+      <div class="world__bar"><span>package.json</span><span class="world__dots">&middot;&middot;&middot;</span></div>
+      <div class="world__body world__body--roomy world__body--gap">
+        <div class="world__row world__row--top">
+          <span class="world__avatar">P</span>
+          <span>your-package<br><span class="world__dim">1.4.2 &middot; MIT</span></span>
+        </div>
+        <div class="world__row world__dim">published to the npm registry</div>
+      </div>
+      <div class="world__bar world__bar--foot">
+        <span>&#10003; verified</span><span class="world__dim">publish authority</span>
+      </div>
+    </div>
+
+    <div class="world__panel" data-slot="tiers">
+      <div class="world__bar"><span>versions</span><span class="world__dots">&middot;&middot;&middot;</span></div>
+      <div class="world__body world__body--roomy world__body--gap">
+        <div class="world__row">
+          <span class="world__pip"></span> 1.4.2
+          <span class="world__dim world__push">latest</span>
+        </div>
+        <div class="world__row">
+          <span class="world__pip world__pip--two"></span> 1.4.1
+          <span class="world__dim world__push">2 weeks</span>
+        </div>
+        <div class="world__row">
+          <span class="world__pip world__pip--three"></span> 1.4.0
+          <span class="world__dim world__push">1 month</span>
+        </div>
+        <div class="world__row world__dim">read from the registry</div>
+      </div>
+    </div>
+
+    <div class="world__panel" data-slot="posts">
+      <div class="world__bar"><span>src/index.js</span><span class="world__dots">&middot;&middot;&middot;</span></div>
+      <div class="world__code">
+        <div class="world__code-line"><span class="world__ln">1</span><span><span class="world__kw">export</span> <span class="world__kw">function</span> <span class="world__fn">resolve</span>(name) {</span></div>
+        <div class="world__code-line"><span class="world__ln">2</span><span>  <span class="world__kw">return</span> registry.<span class="world__fn">get</span>(name)</span></div>
+        <div class="world__code-line"><span class="world__ln">3</span><span>}</span></div>
+        <div class="world__code-line"><span class="world__ln">4</span><span class="world__dim">// built from the linked repo</span></div>
+      </div>
+    </div>
+
+    <div class="world__panel" data-slot="community">
+      <div class="world__bar"><span>contributors</span><span class="world__dots">&middot;&middot;&middot;</span></div>
+      <div class="world__body world__body--roomy world__body--gap">
+        <div class="world__row world__row--top">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 3.6-6.5 8-6.5s8 2.5 8 6.5"/></svg>
+          <span>Maintainers<br><span class="world__dim">from the npm registry</span></span>
+          <span class="world__status"></span>
+        </div>
+        <div class="world__row world__row--top">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><path d="M6 9v6"/><circle cx="18" cy="8" r="3"/><path d="M18 11v1a4 4 0 0 1-4 4H9"/></svg>
+          <span>Commit history<br><span class="world__dim">from the GitHub api</span></span>
+        </div>
+      </div>
+    </div>
+
+    <div class="world__panel world__panel--faint" data-slot="events">
+      <div class="world__body world__body--pad">
+        <div class="world__row">&rarr; package imported</div>
+        <div class="world__row">&#10003; repository linked</div>
+        <div class="world__row">&#10003; publish authority proved</div>
+      </div>
+    </div>
+
+    <div class="world__panel world__panel--faint" data-slot="wallet">
+      <div class="world__bar"><span>identity</span><span class="world__dots">&middot;&middot;&middot;</span></div>
+      <div class="world__body world__body--pad">
+        <div class="world__row"><span class="world__dim">cluster</span> <span class="world__push">devnet</span></div>
+        <div class="world__row world__dim">derived from the package name</div>
+        <div class="world__row world__dim">release records <span class="world__caret">&#9613;</span></div>
+      </div>
+    </div>
+
+    <span class="world__ghost" data-slot="verified">&#10003; publish authority proved</span>
+    <span class="world__ghost" data-slot="live">&bull; identity live</span>
+  </div>
+
+  <div class="shell">
+    <div class="hero__inner rail">
+      <h1 class="hero__title"><span>Launch your</span><span>package onchain.</span></h1>
+      <p class="hero__sub">
+        Packages gives existing npm packages a verified public identity on
+        Solana, connecting their publishers, source code, release history and
+        contributors.
+      </p>
+      <div class="hero__cta">
+        <a class="btn btn--lg btn--ink" href="/connect.html">launch a package</a>
+        <a class="btn btn--lg btn--glass" href="/explore.html">browse packages</a>
+      </div>
+      <div class="hero__status">
+        <span class="pulse-dot"></span>
+        every figure here is read from the npm registry and the GitHub api
+      </div>
+
+      <div class="hero__graph">
+        <svg viewBox="0 0 420 92" aria-hidden="true">
+          <path d="M0 40 H120"/>
+          <path d="M120 40 C150 40 150 14 180 14 H250"/>
+          <path d="M250 14 C280 14 280 40 310 40 H420"/>
+          <path d="M180 40 C210 40 210 70 240 70 H290"/>
+          <circle cx="2" cy="40" r="4"/>
+          <circle cx="62" cy="40" r="4"/>
+          <circle cx="120" cy="40" r="4"/>
+          <circle cx="180" cy="14" r="4"/>
+          <circle cx="250" cy="14" r="4"/>
+          <circle cx="240" cy="70" r="4"/>
+          <circle cx="290" cy="70" r="4"/>
+          <circle cx="360" cy="40" r="4"/>
+        </svg>
+        <div class="hero__graph-caption"><span>find &rarr; prove &rarr; publish &rarr; identity</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================================== ticker -- -->
+<div class="ticker">
+  <div class="ticker__track" data-ticker></div>
+</div>
+
+<!-- ========================================================== search -- -->
+<section class="section section--tight">
+  <div class="shell">
+    <div class="rail">
+      <div class="eyebrow">search the registry</div>
+      <h2 class="section__title section__title--sm">find any package on npm</h2>
+      <div class="searchbar" data-search>
+        <form class="searchbar__row" role="search">
+          <input class="field" type="search" name="q" placeholder="express, @scope/name, left-pad"
+            autocomplete="off" aria-label="search the npm registry">
+          <button class="btn btn--lg btn--ink" type="submit">search</button>
+          <span class="searchbar__hint">
+            searched live against the npm registry. Every package has a page here, claimed or not.
+          </span>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== packages -- -->
+<section class="section" id="packages">
+  <div class="shell">
+    <div class="section__head">
+      <h2 class="section__title">packages</h2>
+      <a class="btn btn--sm btn--glass" href="/explore.html">see all</a>
+    </div>
+
+    <p class="notice" data-featured-note hidden></p>
+
+    <div class="pkgs" data-featured></div>
+  </div>
+</section>
+
+<!-- ======================================================= lifecycle -- -->
+<section class="section">
+  <div class="shell">
+    <h2 class="section__title section__title--measure" data-scrub-heading>how a package<br>gets an identity</h2>
+
+    <div class="lifecycle lifecycle--six" data-lifecycle>
+      <div class="lifecycle__rail">
+        <div class="lifecycle__fill"></div>
+        <div class="lifecycle__bead"></div>
+      </div>
+      <div class="lifecycle__steps">
+        <div class="lifecycle__step">
+          <div class="lifecycle__key">find</div>
+          <div class="lifecycle__name">find your package</div>
+          <p class="lifecycle__copy">search the registry. Importing records what npm reports and nothing more.</p>
+        </div>
+        <div class="lifecycle__step">
+          <div class="lifecycle__key">sign in</div>
+          <div class="lifecycle__name">sign in with GitHub</div>
+          <p class="lifecycle__copy">official oauth, read-only, revocable at any time from your GitHub settings.</p>
+        </div>
+        <div class="lifecycle__step">
+          <div class="lifecycle__key">link</div>
+          <div class="lifecycle__name">link the repository</div>
+          <p class="lifecycle__copy">we read your permission on the repository the package declares.</p>
+        </div>
+        <div class="lifecycle__step">
+          <div class="lifecycle__key">prove</div>
+          <div class="lifecycle__name">prove publish authority</div>
+          <p class="lifecycle__copy">the step that matters. Controlling the repo is not permission to publish.</p>
+        </div>
+        <div class="lifecycle__step">
+          <div class="lifecycle__key">wallet</div>
+          <div class="lifecycle__name">connect a wallet</div>
+          <p class="lifecycle__copy">a signature, not a transaction. Optional, and nothing moves.</p>
+        </div>
+        <div class="lifecycle__step">
+          <div class="lifecycle__key">identity</div>
+          <div class="lifecycle__name">launch the identity</div>
+          <p class="lifecycle__copy">a deterministic address on devnet holding the verified release record.</p>
+        </div>
+      </div>
+    </div>
+
+    <p class="notice" data-reveal style="margin-top:44px">
+      <span class="notice__tag">state</span>
+      steps one to five work today. The sixth is written and waiting on a devnet
+      deployment, and every surface that touches it says so rather than
+      implying an identity already exists.
+    </p>
+  </div>
+</section>
+
+<!-- A real deforming path, carrying the surface across the join between the
+     lifecycle explanation and what it produces. Its geometry is animated by
+     scroll; it is not an oval sliding past. -->
+<div class="seam" data-seam aria-hidden="true">
+  <svg viewBox="0 0 1440 80" preserveAspectRatio="none">
+    <path d="M0,40 C240,40 480,40 720,40 C960,40 1200,40 1440,40 L1440,80 L0,80 Z"/>
+  </svg>
+</div>
+
+<!-- ====================================================== boundaries -- -->
+<section class="section">
+  <div class="shell">
+    <div data-reveal>
+      <div class="eyebrow">what a check mark means here</div>
+      <h2 class="section__title section__title--wide" data-scrub-heading>a repository link<br>is not a proof.</h2>
+      <p class="lede">
+        Anyone can put any repository url in a package.json, and the npm
+        registry does not check it. So a repository link is treated as a claim
+        about where code came from, never as permission to publish, and the
+        difference is visible on every package page.
+      </p>
+    </div>
+
+    <div class="cards-3">
+      <div class="card" data-reveal>
+        <div class="card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        </div>
+        <h3 class="card__title">publish authority, proved</h3>
+        <p class="card__copy">a package is verified only when a string we issue appears in a version its owner published, or when npm's own build attestation names a repository they control.</p>
+      </div>
+      <div class="card" data-reveal>
+        <div class="card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18"/><path d="M5 8h14"/><path d="M7 21h10"/></svg>
+        </div>
+        <h3 class="card__title">no figure is invented</h3>
+        <p class="card__copy">download counts, versions, stars and contributors come from npm and GitHub as those services return them. Where there is no figure you see a dash, never an estimate.</p>
+      </div>
+      <div class="card" data-reveal>
+        <div class="card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12a8 8 0 0 1 8-8"/><path d="M20 12a8 8 0 0 1-8 8"/><path d="M9 7 4 12l5 5"/></svg>
+        </div>
+        <h3 class="card__title">no token, nothing for sale</h3>
+        <p class="card__copy">Packages issues no token and runs no market. An identity is a record of who publishes a package and what they have released. That is the whole product.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="shell">
+    <div class="footer__inner">
+      <div class="footer__brand"><svg class="nav__mark" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect width="24" height="24" rx="7" fill="url(#mk)"/>
+      <path d="M12 6.4 17.8 9.5v5.9L12 18.5 6.2 15.4V9.5z" stroke="#fff" stroke-width="1.45" stroke-linejoin="round"/>
+      <path d="M6.2 9.5 12 12.6l5.8-3.1M12 12.6v5.9" stroke="#fff" stroke-width="1.45" stroke-linejoin="round"/>
+      <defs><linearGradient id="mk" x1="0" y1="0" x2="24" y2="24">
+        <stop stop-color="#7C4DFF"/><stop offset="1" stop-color="#C04DFF"/>
+      </linearGradient></defs>
+    </svg><span>packages</span>
+        <span class="footer__note">package identity &middot; npm &middot; Solana devnet</span>
+      </div>
+      <nav class="footer__links" aria-label="Footer">
+        <a href="/explore.html">packages</a>
+        <a href="/activity.html">activity</a>
+        <a href="/how-it-works.html">how it works</a>
+        <a href="/connect.html">launch</a>
+        <a href="/dashboard.html">dashboard</a>
+      </nav>
+    </div>
+    <p class="footer__legal">
+      Packages is an independent project. It is not affiliated with, endorsed
+      by or operated by npm, GitHub or Microsoft. Package data is read from the
+      public npm registry and the GitHub API and is shown as those services
+      return it. Packages issues no token and offers nothing for sale.
+    </p>
+  </div>
+</footer>
+</div>
+
+<nav class="tabbar" aria-label="Mobile">
+  <a class="tabbar__link" href="explore.html">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>
+    <span>packages</span>
+  </a>
+  <a class="tabbar__link" href="activity.html">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l3-8 4 16 3-8h6"/></svg>
+    <span>activity</span>
+  </a>
+  <a class="tabbar__link" href="how-it-works.html">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/><path d="M4 17.5h16"/></svg>
+    <span>how</span>
+  </a>
+  <a class="tabbar__link" href="dashboard.html">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 1 9-9"/><path d="M12 12l5-3"/><circle cx="12" cy="12" r="1.6"/></svg>
+    <span>dashboard</span>
+  </a>
+</nav>
+
+<!-- Vendored rather than loaded from a cdn, so the content security policy
+     can keep script-src to self. -->
+<script src="/assets/vendor/gsap.min.js"></script>
+<script src="/assets/vendor/ScrollTrigger.min.js"></script>
+<script src="/assets/vendor/Flip.min.js"></script>
+<script src="/assets/vendor/lenis.min.js"></script>
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/ui.js"></script>
+<script src="/assets/js/motion.js"></script>
+<script src="/assets/js/app.js"></script>
+</body>
+</html>

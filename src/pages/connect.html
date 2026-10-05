@@ -1,0 +1,78 @@
+<section class="page-head">
+  <div class="shell">
+    <h1 class="page-head__title">launch a package</h1>
+    <p class="lede">
+      six steps from a published npm package to a verified public identity. Each
+      one reports its own state from the server, so a reload never shows a step
+      as done when it is not.
+    </p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="shell">
+    <!-- Every step is rendered by app.js from the server's view of this
+         account, rather than from anything held in the browser. -->
+    <div data-connect></div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="shell">
+    <div class="steps">
+      <article class="step" data-reveal>
+        <div class="step__n">01</div>
+        <div>
+          <h2 class="step__title">what we read</h2>
+          <p class="step__copy">
+            from npm: the package's public record, which is the same document
+            anyone can fetch from the registry. From GitHub: your login and
+            avatar, your verified email addresses, and your permission on the
+            one repository you ask us to check.
+          </p>
+          <ul class="step__list">
+            <li>read-only, through the official apis</li>
+            <li>no private repository contents, ever</li>
+            <li>figures are shown as returned, or as a dash</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step" data-reveal>
+        <div class="step__n">02</div>
+        <div>
+          <h2 class="step__title">what we never do</h2>
+          <p class="step__copy">
+            nothing is written to your repository or to the registry on your
+            behalf. We never publish a version for you: the proof step asks
+            <em>you</em> to publish one, which is exactly why it proves
+            something.
+          </p>
+          <ul class="step__list">
+            <li>no posting, committing or publishing as you</li>
+            <li>no npm credentials are asked for or accepted</li>
+            <li>revoking on GitHub ends our access immediately</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step" data-reveal>
+        <div class="step__n">03</div>
+        <div>
+          <h2 class="step__title">what a claim is worth</h2>
+          <p class="step__copy">
+            importing a package records what npm says about it and gives you
+            nothing. Linking its repository shows you control that repository.
+            Only the publish proof, or npm's own attestation, makes a package
+            verified, and the public page always shows which of those happened.
+          </p>
+          <ul class="step__list">
+            <li>one verified owner per package</li>
+            <li>withdraw a claim at any time</li>
+            <li>withdrawing releases the package for anyone else to prove</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

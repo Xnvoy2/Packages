@@ -1,0 +1,7 @@
+# Keep checked-out bytes identical on every platform. The migration runner
+# checksums each .sql file, and a CRLF checkout would otherwise change the
+# checksum of a migration that had not been edited.
+* text=auto eol=lf
+*.png binary
+*.ico binary
+*.woff2 binary

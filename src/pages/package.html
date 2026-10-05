@@ -1,0 +1,25 @@
+<!-- The permanent public page for one package.
+
+     Reachable at /p/<name>, which the server rewrites here, and at
+     package.html?p=<name>. Both resolve to the same page and it sets its own
+     canonical url. Everything on it is rendered from the api: the registry's
+     own record of the package, the GitHub repository it declares, and whatever
+     verification has actually been proved. -->
+
+<section class="page-head">
+  <div class="shell">
+    <div data-package></div>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="shell">
+    <p class="notice">
+      <span class="notice__tag">source</span>
+      package facts are read from the npm registry; repository, contributor and
+      commit facts from the GitHub api. A dash means the service reports no
+      value for that field. Nothing on this page is estimated, and the presence
+      of a package here is not an endorsement of it.
+    </p>
+  </div>
+</section>

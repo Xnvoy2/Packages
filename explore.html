@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>packages — Packages</title>
+<meta name="description" content="Search the npm registry and discover packages with a verified public identity.">
+<meta name="color-scheme" content="light">
+<meta name="theme-color" content="#111014">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/css/style.css">
+<script src="/assets/config.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">skip to content</a>
+<div class="atmosphere">
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a class="nav__brand" href="/index.html"><svg class="nav__mark" width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect width="24" height="24" rx="7" fill="url(#mk)"/>
+      <path d="M12 6.4 17.8 9.5v5.9L12 18.5 6.2 15.4V9.5z" stroke="#fff" stroke-width="1.45" stroke-linejoin="round"/>
+      <path d="M6.2 9.5 12 12.6l5.8-3.1M12 12.6v5.9" stroke="#fff" stroke-width="1.45" stroke-linejoin="round"/>
+      <defs><linearGradient id="mk" x1="0" y1="0" x2="24" y2="24">
+        <stop stop-color="#7C4DFF"/><stop offset="1" stop-color="#C04DFF"/>
+      </linearGradient></defs>
+    </svg><span>packages</span></a>
+    <nav class="nav__links" aria-label="Primary">
+      <a class="nav__link" href="explore.html" aria-current="page">packages</a>
+      <a class="nav__link" href="activity.html">activity</a>
+      <a class="nav__link" href="connect.html">launch</a>
+      <a class="nav__link" href="how-it-works.html">how it works</a>
+    </nav>
+    <span class="nav__spacer"></span>
+    <a class="nav__link nav__link--quiet" href="/dashboard.html" data-auth-only hidden>dashboard</a>
+    <a class="btn btn--sm btn--ink" href="/connect.html" data-nav-cta>launch a package</a>
+  </div>
+</header>
+<main id="main" tabindex="-1">
+<section class="page-head">
+  <div class="shell">
+    <h1 class="page-head__title">packages</h1>
+    <p class="lede">
+      search the npm registry, or browse the packages whose publishers have
+      proved who they are here.
+    </p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="shell">
+
+    <div class="searchbar" data-search>
+      <form class="searchbar__row" role="search">
+        <input class="field" type="search" name="q" placeholder="express, @scope/name, left-pad"
+          autocomplete="off" aria-label="search the npm registry">
+        <button class="btn btn--lg btn--ink" type="submit">search npm</button>
+        <span class="searchbar__hint">
+          results come from the npm registry's own search, in its own ranking order.
+        </span>
+      </form>
+      <div class="searchbar__state" data-search-state></div>
+    </div>
+
+    <!-- Discovery views, filled from the api so the list cannot drift from
+         what the server actually offers. -->
+    <div class="filters" data-views role="group" aria-label="Browse" style="margin-top:28px"></div>
+
+    <p class="notice" data-results-note hidden style="margin-top:20px"></p>
+
+    <div class="pkgs" data-results style="margin-top:28px"></div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="shell">
+    <div class="footer__inner">
+      <div class="footer__brand"><svg class="nav__mark" width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect width="24" height="24" rx="7" fill="url(#mk)"/>
+      <path d="M12 6.4 17.8 9.5v5.9L12 18.5 6.2 15.4V9.5z" stroke="#fff" stroke-width="1.45" stroke-linejoin="round"/>
+      <path d="M6.2 9.5 12 12.6l5.8-3.1M12 12.6v5.9" stroke="#fff" stroke-width="1.45" stroke-linejoin="round"/>
+      <defs><linearGradient id="mk" x1="0" y1="0" x2="24" y2="24">
+        <stop stop-color="#7C4DFF"/><stop offset="1" stop-color="#C04DFF"/>
+      </linearGradient></defs>
+    </svg><span>packages</span>
+        <span class="footer__note">package identity &middot; npm &middot; Solana devnet</span>
+      </div>
+      <nav class="footer__links" aria-label="Footer">
+        <a href="/explore.html">packages</a>
+        <a href="/activity.html">activity</a>
+        <a href="/how-it-works.html">how it works</a>
+        <a href="/connect.html">launch</a>
+        <a href="/dashboard.html">dashboard</a>
+      </nav>
+    </div>
+    <p class="footer__legal">
+      Packages is an independent project. It is not affiliated with, endorsed
+      by or operated by npm, GitHub or Microsoft. Package data is read from the
+      public npm registry and the GitHub API and is shown as those services
+      return it. Packages issues no token and offers nothing for sale.
+    </p>
+  </div>
+</footer>
+</div>
+
+<nav class="tabbar" aria-label="Mobile">
+  <a class="tabbar__link" href="explore.html" aria-current="page">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z"/></svg>
+    <span>packages</span>
+  </a>
+  <a class="tabbar__link" href="activity.html">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12h4l3-8 4 16 3-8h6"/></svg>
+    <span>activity</span>
+  </a>
+  <a class="tabbar__link" href="how-it-works.html">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4.5A2.5 2.5 0 0 1 6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5z"/><path d="M4 17.5h16"/></svg>
+    <span>how</span>
+  </a>
+  <a class="tabbar__link" href="dashboard.html">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 1 9-9"/><path d="M12 12l5-3"/><circle cx="12" cy="12" r="1.6"/></svg>
+    <span>dashboard</span>
+  </a>
+</nav>
+
+<!-- Vendored rather than loaded from a cdn, so the content security policy
+     can keep script-src to self. -->
+<script src="/assets/vendor/gsap.min.js"></script>
+<script src="/assets/vendor/ScrollTrigger.min.js"></script>
+<script src="/assets/vendor/Flip.min.js"></script>
+<script src="/assets/vendor/lenis.min.js"></script>
+<script src="/assets/js/api.js"></script>
+<script src="/assets/js/ui.js"></script>
+<script src="/assets/js/motion.js"></script>
+<script src="/assets/js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>probe</title>
+<!-- Dev-only QA harness, not part of the site. Loads a page in a same-origin
+     iframe at a fixed width so layout can be measured honestly: Chrome's
+     --window-size lays the page out wider than it captures, which makes
+     screenshots lie about overflow.
+       ?w=390&p=index.html        measure, print findings
+       ?w=390&p=index.html&shot=1 same, but no printed output (for screenshots)
+       &check=sort|reveal         run a behaviour assertion instead           -->
+<style>html,body{margin:0;background:#888;font:12px/1.5 ui-monospace,monospace}iframe{border:0;display:block}pre{background:#fff;margin:0;padding:12px}</style>
+<body>
+<script>
+const params = new URLSearchParams(location.search);
+const W = Number(params.get("w") || 390);
+const H = Number(params.get("h") || 2400);
+const page = params.get("p") || "index.html";
+const check = params.get("check");
+
+const frame = document.createElement("iframe");
+frame.width = W;
+frame.height = H;
+frame.src = "/" + page;
+document.body.appendChild(frame);
+
+const emit = (lines) => {
+  if (params.get("shot")) return;
+  const pre = document.createElement("pre");
+  pre.id = "probe-out";
+  pre.textContent = lines.join("\n");
+  document.body.appendChild(pre);
+};
+
+function measure(doc) {
+  const out = [
+    "viewport=" + W +
+      " docScrollWidth=" + doc.documentElement.scrollWidth +
+      " bodyScrollWidth=" + doc.body.scrollWidth +
+      " docHeight=" + doc.documentElement.scrollHeight,
+  ];
+  const seen = new Set();
+  doc.querySelectorAll("*").forEach((el) => {
+    const r = el.getBoundingClientRect();
+    if (r.width === 0) return;
+    // The ticker marquee runs off both edges by design, and .filters is a
+    // horizontal scroll rail, so neither counts as page overflow.
+    if (el.closest(".ticker") || el.closest(".filters")) return;
+    if (r.right > W + 0.5 || r.left < -0.5) {
+      const sig = el.tagName + "." + String(el.className || "");
+      if (seen.has(sig)) return;
+      seen.add(sig);
+      out.push("OVERFLOW " + sig + " left=" + r.left.toFixed(1) + " right=" + r.right.toFixed(1));
+    }
+  });
+  if (out.length === 1) out.push("no overflow");
+  return out;
+}
+
+function checkSort(doc, win) {
+  const out = [];
+  const chip = doc.querySelector('[data-sort="recent"]');
+  if (!chip) return ["FAIL no recent chip"];
+  chip.click();
+  const order = Array.from(doc.querySelectorAll(".market__ago")).map((n) =>
+    n.textContent.replace("launched ", "").trim()
+  );
+  out.push("order=" + JSON.stringify(order));
+  const UNIT = { s: 1 / 60, m: 1, h: 60, d: 1440, w: 10080, y: 525600 };
+  const mins = order.map((s) => {
+    const m = s.match(/(\d+(?:\.\d+)?)\s*([smhdwy])/i);
+    return m ? Number(m[1]) * UNIT[m[2].toLowerCase()] : Infinity;
+  });
+  out.push("minutes=" + JSON.stringify(mins));
+  const sorted = mins.every((v, i) => i === 0 || mins[i - 1] <= v);
+  out.push(sorted ? "PASS recency ascending" : "FAIL not ascending");
+  const pressed = doc.querySelectorAll('[data-filter] [aria-pressed="true"]');
+  out.push(
+    pressed.length === 1 && pressed[0].dataset.sort === "recent"
+      ? "PASS aria-pressed moved to recent"
+      : "FAIL aria-pressed count=" + pressed.length
+  );
+  return out;
+}
+
+function checkReveal(doc, win) {
+  const out = [];
+  const cards = Array.from(doc.querySelectorAll(".markets .market"));
+  out.push("cards=" + cards.length);
+  const revealed = cards.filter((c) => c.classList.contains("is-in")).length;
+  out.push("revealed=" + revealed);
+  const urls = Array.from(doc.querySelectorAll(".repo__url"));
+  const multiline = urls.filter((u) => u.getBoundingClientRect().height > 20).length;
+  out.push(multiline === 0 ? "PASS all repo urls single line" : "FAIL " + multiline + " wrapped");
+  const inline = doc.querySelectorAll("main [style]").length;
+  out.push("inline style attrs in main=" + inline);
+  return out;
+}
+
+frame.onload = () => {
+  setTimeout(() => {
+    const doc = frame.contentDocument;
+    const win = frame.contentWindow;
+    let out;
+    if (check === "sort") out = checkSort(doc, win);
+    else if (check === "reveal") out = checkReveal(doc, win);
+    else out = measure(doc);
+    emit(out);
+  }, 1500);
+};
+</script>

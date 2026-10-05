@@ -1,0 +1,10 @@
+node_modules/
+.env
+.env.*
+!.env.example
+*.log
+chrome-profile/
+solana/target/
+.vercel/
+.DS_Store
+sitemap.xml

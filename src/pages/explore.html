@@ -1,0 +1,34 @@
+<section class="page-head">
+  <div class="shell">
+    <h1 class="page-head__title">packages</h1>
+    <p class="lede">
+      search the npm registry, or browse the packages whose publishers have
+      proved who they are here.
+    </p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="shell">
+
+    <div class="searchbar" data-search>
+      <form class="searchbar__row" role="search">
+        <input class="field" type="search" name="q" placeholder="express, @scope/name, left-pad"
+          autocomplete="off" aria-label="search the npm registry">
+        <button class="btn btn--lg btn--ink" type="submit">search npm</button>
+        <span class="searchbar__hint">
+          results come from the npm registry's own search, in its own ranking order.
+        </span>
+      </form>
+      <div class="searchbar__state" data-search-state></div>
+    </div>
+
+    <!-- Discovery views, filled from the api so the list cannot drift from
+         what the server actually offers. -->
+    <div class="filters" data-views role="group" aria-label="Browse" style="margin-top:28px"></div>
+
+    <p class="notice" data-results-note hidden style="margin-top:20px"></p>
+
+    <div class="pkgs" data-results style="margin-top:28px"></div>
+  </div>
+</section>

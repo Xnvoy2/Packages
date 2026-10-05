@@ -1,0 +1,28 @@
+{
+  "name": "packages-identity",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Packages: a verified public identity on Solana for npm packages.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node tools/build.js",
+    "start": "node tools/build.js && node tools/serve.js",
+    "serve": "node tools/serve.js",
+    "api": "node api/index.js",
+    "dev": "node tools/dev.js",
+    "test": "node --test \"api/test/*.test.js\"",
+    "migrate": "node api/migrate.js",
+    "start:prod": "node tools/build.js && node tools/serve.js"
+  },
+  "dependencies": {
+    "@solana/web3.js": "^1.99.0",
+    "pg": "^8.23.1"
+  },
+  "devDependencies": {
+    "embedded-postgres": "18.4.0-beta.17",
+    "pg-mem": "^3.0.14"
+  },
+  "type": "commonjs"
+}

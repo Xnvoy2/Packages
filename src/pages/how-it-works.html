@@ -1,0 +1,214 @@
+<section class="page-head">
+  <div class="shell">
+    <h1 class="page-head__title">how it works</h1>
+    <p class="lede">
+      npm is where your package is published. This is where it has a public
+      identity: who publishes it, what they have released, and a proof that
+      links the two.
+    </p>
+  </div>
+</section>
+
+<section class="section section--tight">
+  <div class="shell">
+    <h2 class="section__title section__title--measure" data-reveal>six steps from<br>package to identity</h2>
+
+    <div class="lifecycle lifecycle--six" data-lifecycle>
+      <div class="lifecycle__rail">
+        <div class="lifecycle__fill"></div>
+        <div class="lifecycle__bead"></div>
+      </div>
+      <div class="lifecycle__steps">
+        <div class="lifecycle__step">
+          <div class="lifecycle__key">find</div>
+          <div class="lifecycle__name">find your package</div>
+          <p class="lifecycle__copy">search the registry and import the one you publish.</p>
+        </div>
+        <div class="lifecycle__step">
+          <div class="lifecycle__key">sign in</div>
+          <div class="lifecycle__name">sign in with GitHub</div>
+          <p class="lifecycle__copy">official oauth. Read-only, and revocable from your GitHub settings.</p>
+        </div>
+        <div class="lifecycle__step">
+          <div class="lifecycle__key">link</div>
+          <div class="lifecycle__name">link the repository</div>
+          <p class="lifecycle__copy">we check your permission on the repository the package declares.</p>
+        </div>
+        <div class="lifecycle__step">
+          <div class="lifecycle__key">prove</div>
+          <div class="lifecycle__name">prove publish authority</div>
+          <p class="lifecycle__copy">publish a version carrying a string we issue, or let npm's attestation speak.</p>
+        </div>
+        <div class="lifecycle__step">
+          <div class="lifecycle__key">wallet</div>
+          <div class="lifecycle__name">connect a wallet</div>
+          <p class="lifecycle__copy">sign a message to prove the key is yours. Optional, and nothing moves.</p>
+        </div>
+        <div class="lifecycle__step">
+          <div class="lifecycle__key">identity</div>
+          <div class="lifecycle__name">launch the identity</div>
+          <p class="lifecycle__copy">a deterministic devnet address holding the verified release record.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+    <div data-reveal>
+      <div class="eyebrow">the hard part</div>
+      <h2 class="section__title section__title--wide" data-scrub-heading>why a repository<br>proves nothing.</h2>
+      <p class="lede">
+        The <code>repository</code> field in a package.json is written by
+        whoever publishes the package, and the npm registry does not check it.
+        Two different people can publish two different packages both pointing
+        at the same repository. So owning a repository cannot be treated as
+        permission to publish a package, and here it is not.
+      </p>
+    </div>
+
+    <div class="steps">
+      <article class="step" data-reveal>
+        <div class="step__n">01</div>
+        <div>
+          <h3 class="step__title">repository control</h3>
+          <p class="step__copy">
+            With your own GitHub token we read one thing: whether you can push
+            to the repository the package declares. A push, maintain or admin
+            permission passes. If GitHub does not return a permission block for
+            the scopes you granted, the answer is recorded as unknown rather
+            than as a no.
+          </p>
+          <ul class="step__list">
+            <li>checked against the GitHub api, not typed in</li>
+            <li>shown as "repo linked", never as verified</li>
+            <li>half of one route to verification, on its own worth nothing</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step" data-reveal>
+        <div class="step__n">02</div>
+        <div>
+          <h3 class="step__title">npm's own build attestation</h3>
+          <p class="step__copy">
+            When a package is published from a CI workflow through npm's
+            trusted-publisher flow, npm publishes a signed provenance
+            statement naming the repository the tarball was built from. We
+            compare GitHub's immutable numeric repository id, not the name,
+            because a repository can be renamed and its old name claimed by
+            someone else. A match means the registry itself vouches for the
+            link.
+          </p>
+          <ul class="step__list">
+            <li>compared by repository id, which cannot change</li>
+            <li>tried against the three most recent versions</li>
+            <li>with repository control, this is sufficient</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step" data-reveal>
+        <div class="step__n">03</div>
+        <div>
+          <h3 class="step__title">the direct proof</h3>
+          <p class="step__copy">
+            The route that needs no repository at all. We issue a one-time
+            string; you add it to your package.json and publish a version. Only
+            an account that can run <code>npm publish</code> for that package
+            can put a string into one of its published versions, so finding it
+            there proves publish authority outright.
+          </p>
+          <div data-proof-example></div>
+          <ul class="step__list">
+            <li>only versions published after the string was issued count</li>
+            <li>the string is single-use and expires in thirty minutes</li>
+            <li>sufficient on its own, and the strongest proof here</li>
+          </ul>
+        </div>
+      </article>
+
+      <article class="step" data-reveal>
+        <div class="step__n">04</div>
+        <div>
+          <h3 class="step__title">the maintainer email signal</h3>
+          <p class="step__copy">
+            We also check whether an npm maintainer's email matches a verified
+            email on your GitHub account. It is shown because it is useful
+            context, and it is labelled "signal only" everywhere it appears: a
+            maintainer email is public on the registry, so matching it proves
+            only that the same address is on both accounts. It never
+            contributes to a verified status.
+          </p>
+          <ul class="step__list">
+            <li>verified GitHub emails only, never unverified ones</li>
+            <li>never sufficient, alone or in combination</li>
+            <li>displayed for transparency, not as a proof</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+
+    <div class="split split--loose" data-reveal>
+      <div class="split__label">the rule, in full</div>
+      <p class="panel__copy" style="margin-top:12px">
+        A package is verified when the publish proof passes, or when repository
+        control and npm's build attestation both pass. Repository control on its
+        own yields "repo linked". Nothing else reaches verified, and no
+        combination of signals substitutes for a proof.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="shell">
+    <div data-reveal>
+      <div class="eyebrow">the wallet</div>
+      <h2 class="section__title section__title--wide">a signature,<br>not a transaction.</h2>
+      <p class="lede">
+        Connecting a Solana wallet is optional and proves one thing: that the
+        key is yours. You sign a short message this server generated, containing
+        a single-use nonce. Nothing is sent, no funds move, and we never hold
+        your keys.
+      </p>
+    </div>
+
+    <div class="cards-3">
+      <div class="card" data-reveal>
+        <div class="card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>
+        </div>
+        <h3 class="card__title">you sign, we verify</h3>
+        <p class="card__copy">the server issues the exact message, your wallet signs it, and the signature is checked against your public key. A message we did not issue is rejected.</p>
+      </div>
+      <div class="card" data-reveal>
+        <div class="card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><path d="M7 15h3"/></svg>
+        </div>
+        <h3 class="card__title">non-custodial, always</h3>
+        <p class="card__copy">you keep your keys. There is no deposit step anywhere in this product, nothing to approve, and no token of any kind.</p>
+      </div>
+      <div class="card" data-reveal>
+        <div class="card__icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v6"/><path d="M12 15v6"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <h3 class="card__title">devnet, and undeployed</h3>
+        <p class="card__copy" data-onchain-state>the identity program is not deployed yet.</p>
+      </div>
+    </div>
+
+    <div class="split split--loose" data-reveal>
+      <div class="split__label">what an identity holds</div>
+      <p class="panel__copy" style="margin-top:12px">
+        An account at an address derived from the package name, so it is the
+        same address for everyone and can be shown before it exists. It records
+        the verified publisher, the repository that was proved, and a hash of
+        each release: the package name, the version and the publish time, which
+        anyone can recompute. A published version cannot change, so those
+        records are written once and never rewritten.
+      </p>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,99 @@
+<!doctype html>
+<!-- The source for assets/og.png, rendered by tools/make-og.js at 1200x630.
+     It is a page rather than a drawing so the card uses the site's own
+     tokens, type and mark, and cannot drift away from the design. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="/assets/css/style.css">
+<style>
+  html, body { margin: 0; padding: 0; }
+  body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+    background: var(--atmosphere);
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    padding: 64px 72px;
+    box-sizing: border-box;
+  }
+  /* The same bloom the site puts behind its hero. */
+  body::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(620px 380px at 50% 10%, oklch(70% 0.12 293 / 0.14), transparent 70%),
+      radial-gradient(520px 320px at 90% 70%, oklch(80% 0.08 320 / 0.10), transparent 72%);
+  }
+  .brand {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+  }
+  .brand svg { width: 40px; height: 40px; border-radius: 12px; }
+  .headline {
+    position: relative;
+    align-self: center;
+    font-size: 86px;
+    line-height: 0.95;
+    letter-spacing: -0.045em;
+    font-weight: 500;
+    max-width: 18ch;
+  }
+  .headline span { display: block; }
+  .sub {
+    position: relative;
+    font-size: 23px;
+    line-height: 1.5;
+    color: oklch(13% 0.012 285 / 0.55);
+    max-width: 46ch;
+    margin-top: 22px;
+  }
+  .foot {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-family: var(--mono);
+    font-size: 17px;
+    color: oklch(13% 0.012 285 / 0.45);
+  }
+  .foot .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--violet);
+  }
+</style>
+</head>
+<body>
+  <div class="brand">
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect width="24" height="24" rx="7" fill="url(#mk)"/>
+      <path d="M12 6.4 17.8 9.5v5.9L12 18.5 6.2 15.4V9.5z" stroke="#fff" stroke-width="1.45" stroke-linejoin="round"/>
+      <path d="M6.2 9.5 12 12.6l5.8-3.1M12 12.6v5.9" stroke="#fff" stroke-width="1.45" stroke-linejoin="round"/>
+      <defs><linearGradient id="mk" x1="0" y1="0" x2="24" y2="24">
+        <stop stop-color="#7C4DFF"/><stop offset="1" stop-color="#C04DFF"/>
+      </linearGradient></defs>
+    </svg>
+    <span>packages</span>
+  </div>
+
+  <div>
+    <h1 class="headline"><span>Launch your</span><span>package onchain.</span></h1>
+    <p class="sub">
+      A verified public identity for npm packages, linking publisher, source,
+      release history and contributors.
+    </p>
+  </div>
+
+  <div class="foot"><span class="dot"></span>npm &middot; GitHub &middot; Solana devnet</div>
+</body>
+</html>
