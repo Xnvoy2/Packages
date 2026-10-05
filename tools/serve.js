@@ -30,7 +30,9 @@ const CSP = [
   "font-src 'self' https://fonts.gstatic.com",
   // Contributor and account avatars come from GitHub's own cdn.
   "img-src 'self' data: https://avatars.githubusercontent.com",
-  "connect-src 'self'",
+  "connect-src 'self' https://auth.privy.io https://api.privy.io",
+  // The embedded wallet runs in an iframe Privy hosts.
+  "frame-src https://auth.privy.io",
   "base-uri 'self'",
   "form-action 'self'",
   "frame-ancestors 'none'",

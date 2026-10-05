@@ -97,7 +97,17 @@
       return mePromise;
     },
 
-    signInUrl: () => `${BASE}/api/auth/github/start`,
+    /* GitHub is no longer a way in. This is the link that proves authority
+       over a repository, and the server refuses it without a session. */
+    linkGithubUrl: () => `${BASE}/api/auth/github/start`,
+
+    /* Exchange a verified Privy token for the session cookie the rest of
+       the api uses. */
+    async signInWithPrivy(token) {
+      const r = await post("/api/auth/privy", { token });
+      mePromise = null;
+      return r;
+    },
 
     async signOut() {
       const r = await post("/api/auth/logout");

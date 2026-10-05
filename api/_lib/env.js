@@ -44,6 +44,13 @@ const config = {
     readToken: pick("GITHUB_READ_TOKEN", ""),
   },
 
+  /* Privy owns signing in. Only the app id is needed, and it is public: the
+     token is verified against Privy's published key set, so no Privy secret
+     ever has to exist on this server. */
+  privy: {
+    appId: pick("PRIVY_APP_ID", ""),
+  },
+
   solana: {
     cluster: "devnet",
     rpcUrl: pick("SOLANA_RPC_URL", "https://api.devnet.solana.com"),
@@ -55,6 +62,8 @@ const config = {
   userAgent:
     "packages-identity/1.0 (+https://github.com/packages-identity) node-fetch",
 };
+
+config.privyConfigured = Boolean(config.privy.appId);
 
 config.githubConfigured = Boolean(
   config.github.clientId && config.github.clientSecret

@@ -8,9 +8,10 @@
 
 const crypto = require("crypto");
 const { config } = require("../_lib/env");
-const { send, redirect, badRequest, HttpError } = require("../_lib/http");
+const { send, redirect, badRequest, HttpError, readJson } = require("../_lib/http");
 const session = require("../_lib/session");
 const github = require("../_lib/github");
+const privy = require("../_lib/privy");
 const store = require("../_lib/store");
 const present = require("../_lib/present");
 const lifecycle = require("../_lib/lifecycle");
@@ -34,9 +35,22 @@ async function start(req, res) {
     throw new HttpError(
       503,
       "github_not_configured",
-      "GitHub sign-in is not configured on this server: GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET are unset"
+      "GitHub linking is not configured on this server: GITHUB_CLIENT_ID and GITHUB_CLIENT_SECRET are unset"
     );
   }
+
+  /* Refused before the round trip rather than after it. Sending someone to
+     GitHub and only then finding they have no session wastes a consent
+     screen and lands them on an error they did not cause. */
+  const current = await session.read(req);
+  if (!current) {
+    throw new HttpError(
+      401,
+      "signin_first",
+      "sign in first: GitHub proves authority over a repository, it does not sign you in"
+    );
+  }
+
   const state = github.newState();
   res.writeHead(302, {
     location: github.authorizeUrl(state),
@@ -80,17 +94,76 @@ async function callback(req, res, ctx) {
     throw badRequest("oauth_state_mismatch", "sign-in state did not match; start again");
   }
 
+  /* GitHub is no longer a way in. It attaches repository authority to an
+     account Privy has already signed in, so a session must exist here
+     already. Without this check a GitHub round trip would quietly mint an
+     account with no Privy identity, which is the model we moved away from. */
+  const current = await session.read(req);
+  if (!current) {
+    return redirect(req, res, `${config.siteOrigin}/connect.html?github=signin_first`);
+  }
+
   const { token } = await github.exchangeCode(code);
   const profile = await github.viewer(token);
-  const user = await store.upsertUser(profile);
-  const created = await session.create(user.id, token);
+
+  const linked = await store.linkGithub(current.user.id, profile);
+  if (linked.conflict) {
+    // That GitHub account already carries authority for a different Packages
+    // account. Moving it would move whatever that account had proved.
+    return redirect(req, res, `${config.siteOrigin}/connect.html?github=already_linked`);
+  }
+
+  /* The GitHub token lives on the session row, encrypted, and that row is
+     written once at creation. Rather than add a mutable token column, the
+     session is replaced: same user, same cookie mechanics, now carrying the
+     token the repository checks need. */
+  await session.destroy(current.sessionId);
+  const created = await session.create(current.user.id, token);
 
   res.writeHead(302, {
-    location: `${config.siteOrigin}/dashboard.html?auth=ok`,
+    location: `${config.siteOrigin}/dashboard.html?github=linked`,
     "set-cookie": [created.setCookie, stateCookie("", 0)],
     "cache-control": "no-store",
   });
   res.end();
+}
+
+/* Signing in. The browser completes a Privy login and sends the token it was
+   issued; this verifies it against Privy's published keys and exchanges it
+   for the session cookie the rest of the api already uses.
+
+   This establishes only that a Privy login happened and which account it
+   was. It grants no authority over any package: every publisher rule still
+   has to be satisfied separately, and nothing here touches them. */
+async function privyLogin(req, res) {
+  if (!config.privyConfigured) {
+    throw new HttpError(503, "privy_not_configured", "sign-in is not configured");
+  }
+  const body = await readJson(req);
+  const token = String(body.token || "").trim();
+  if (!token) throw badRequest("token_missing", "no sign-in token was sent");
+
+  const claims = await privy.verifyToken(token);
+  const identity = privy.describe(claims);
+
+  const user = await store.upsertPrivyUser(identity);
+  const created = await session.create(user.id, null);
+
+  send(
+    req,
+    res,
+    200,
+    {
+      signedIn: true,
+      user: {
+        id: user.id,
+        displayName: user.display_name,
+        githubLogin: user.github_login || null,
+        githubLinked: Boolean(user.github_id),
+      },
+    },
+    { "set-cookie": created.setCookie }
+  );
 }
 
 async function logout(req, res) {
@@ -105,6 +178,7 @@ async function me(req, res) {
     return send(req, res, 200, {
       signedIn: false,
       githubConfigured: config.githubConfigured,
+      signInConfigured: config.privyConfigured,
     });
   }
   const [packages, wallets] = await Promise.all([
@@ -134,6 +208,7 @@ async function me(req, res) {
   send(req, res, 200, {
     signedIn: true,
     githubConfigured: config.githubConfigured,
+    signInConfigured: config.privyConfigured,
     // The OAuth token is never part of this, or any, response.
     releases,
     user: present.userProfile(
@@ -242,4 +317,4 @@ async function publicProfile(req, res, ctx) {
   });
 }
 
-module.exports = { start, callback, logout, me, publicProfile, claimRow, STATE_COOKIE };
+module.exports = { start, callback, logout, me, privyLogin, publicProfile, claimRow, STATE_COOKIE };

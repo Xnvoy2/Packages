@@ -27,7 +27,10 @@ async function challenge(req, res) {
     // itself and the two sides cannot disagree about what was signed.
     message: solana.walletProofMessage({
       nonce: issued.nonce,
-      login: current.user.login,
+      /* The account id, not the GitHub login. An account signed in through
+         Privy may have no GitHub identity at all, and the id is the one
+         identifier every account has and nobody can change. */
+      login: current.user.id,
       issuedAt,
     }),
     issuedAt,
@@ -52,7 +55,7 @@ async function confirm(req, res) {
   if (!message.startsWith("Packages: prove wallet ownership")) {
     throw badRequest("message_mismatch", "that is not the message this server issued");
   }
-  if (!message.includes(`account: ${current.user.login}`)) {
+  if (!message.includes(`account: ${current.user.id}`)) {
     throw badRequest("message_mismatch", "that message was issued for a different account");
   }
 

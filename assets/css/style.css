@@ -2154,6 +2154,55 @@ html::after {
   html::after { display: none; }
 }
 
+/* ------------------------------------------------------------ sign in --- */
+
+/* Built from the same tokens as everything else, so it inherits the theme
+   rather than carrying a palette of its own. */
+.signin {
+  position: fixed;
+  inset: 0;
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+}
+
+.signin__scrim {
+  position: absolute;
+  inset: 0;
+  background: oklch(8% 0.002 286 / 0.72);
+}
+
+.signin__panel {
+  position: relative;
+  width: min(420px, 100%);
+  padding: 28px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow-lift);
+}
+
+.signin__close { position: absolute; top: 14px; right: 14px; }
+.signin__title { font-size: 24px; letter-spacing: -0.02em; margin-top: 6px; }
+.signin__copy { margin-top: 10px; color: var(--ink-78); font-size: 14.5px; line-height: 1.55; }
+.signin__label { display: block; font-size: 12px; color: var(--ink-60); margin-bottom: 6px; }
+.signin__hint { min-height: 18px; margin-top: 4px; font-size: 13px; color: var(--ink-60); }
+
+.signin__form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.signin__alt { margin-top: 14px; }
+
+/* The page behind must not scroll while the dialog is open. Lenis is driving
+   that scroll, so stopping the wheel is not enough on its own; the class is
+   also what Lenis's own stopped state keys off. */
+html.signin-open { overflow: hidden; }
+
 /* The X link sits with the nav's quiet controls: an icon the colour of
    secondary text, lifting to the accent on hover like every other link. */
 .nav__x {

@@ -149,6 +149,51 @@ const recentEvents = (limit) =>
     [limit]
   );
 
+/* A Privy account, which is now what a session is built on.
+
+   Looked up by the Privy DID, never by email: an email can be changed or
+   reused, and matching on it would let one account be mistaken for another.
+   A user created this way has no GitHub identity at all until they link one,
+   which is the point of the change. */
+async function upsertPrivyUser(identity) {
+  const existing = await db.one("select id from users where privy_did = $1", [identity.did]);
+  if (existing) {
+    return db.one(
+      `update users set last_seen_at = now(),
+              display_name = coalesce(display_name, $2)
+         where id = $1 returning *`,
+      [existing.id, identity.email || null]
+    );
+  }
+  return db.one(
+    `insert into users (id, privy_did, display_name, privy_linked_at)
+     values ($1, $2, $3, now()) returning *`,
+    [crypto.randomUUID(), identity.did, identity.email || null]
+  );
+}
+
+/* Attach a GitHub identity to an account that already exists. This is the
+   authority connection, not a sign-in: it is only ever reached from inside a
+   session Privy has already established. A GitHub identity already bound to
+   another account is refused rather than moved, because moving it would
+   transfer whatever authority that account had proved. */
+async function linkGithub(userId, profile) {
+  const taken = await db.one(
+    "select id from users where github_id = $1 and id <> $2",
+    [profile.id, userId]
+  );
+  if (taken) return { conflict: true };
+  const row = await db.one(
+    `update users set github_id = $2, github_login = $3,
+            display_name = coalesce(display_name, $4),
+            avatar_url = $5, profile_url = $6,
+            github_linked_at = now(), last_seen_at = now()
+       where id = $1 returning *`,
+    [userId, profile.id, profile.login, profile.name, profile.avatarUrl, profile.profileUrl]
+  );
+  return { user: row };
+}
+
 async function upsertUser(profile) {
   const existing = await db.one("select id from users where github_id = $1", [
     profile.id,
@@ -200,6 +245,8 @@ async function addWallet(userId, pubkey, cluster) {
 }
 
 module.exports = {
+  upsertPrivyUser,
+  linkGithub,
   upsertPackage,
   getPackage,
   claimView,

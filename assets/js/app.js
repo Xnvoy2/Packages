@@ -1086,8 +1086,8 @@
                          package page still work.
                        </p>`
                     : `<div class="panel__foot">
-                         <a class="btn btn--lg btn--ink" href="${UI.esc(API.signInUrl())}">sign in with GitHub to connect it</a>
-                         <span class="panel__hint">read:user and user:email</span>
+                         <button class="btn btn--lg btn--ink" type="button" data-signin>sign in to connect it</button>
+                         <span class="panel__hint">email or a Solana wallet</span>
                        </div>`
                 }`
          }`,
@@ -1655,12 +1655,12 @@
     if (!me || !me.signedIn) {
       root.innerHTML = UI.empty(
         "you are not signed in",
-        me && me.githubConfigured === false
+        me && me.signInConfigured === false
           ? "GitHub sign-in is not configured on this server, so there is no dashboard to show."
-          : "sign in with GitHub to see the packages you have claimed.",
-        me && me.githubConfigured === false
+          : "sign in to see the packages you have claimed.",
+        me && me.signInConfigured === false
           ? '<a class="btn btn--sm btn--glass" href="/explore.html">browse packages</a>'
-          : `<a class="btn btn--sm btn--ink" href="${UI.esc(API.signInUrl())}">sign in with GitHub</a>`
+          : `<button class="btn btn--sm btn--ink" type="button" data-signin>sign in</button>`
       );
       root.classList.add("is-loaded");
       observeReveals(root);

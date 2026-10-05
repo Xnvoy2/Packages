@@ -53,6 +53,7 @@ const ROUTES = [
   ["GET", "/api/auth/github/start", auth.start, "auth"],
   ["GET", "/api/auth/github/callback", auth.callback, "auth"],
   ["POST", "/api/auth/logout", auth.logout, "write"],
+  ["POST", "/api/auth/privy", auth.privyLogin, "auth"],
   ["GET", "/api/me", auth.me, "read"],
   ["GET", "/api/developers/:login", auth.publicProfile, "read"],
 
@@ -99,7 +100,8 @@ async function publicConfig(req, res) {
   const cluster = await solana.clusterStatus();
   send(req, res, 200, {
     product: "Packages",
-    githubSignIn: config.githubConfigured,
+    githubLinking: config.githubConfigured,
+    signIn: config.privyConfigured,
     solana: {
       cluster: cluster.cluster,
       programId: cluster.programId,
