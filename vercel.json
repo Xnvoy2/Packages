@@ -4,13 +4,20 @@
   "outputDirectory": "dist",
   "framework": null,
   "functions": {
-    "api/[...path].js": {
+    "api/index.js": {
       "maxDuration": 30,
       "includeFiles": "api/migrations/**"
     }
   },
   "rewrites": [
-    { "source": "/p/:name*", "destination": "/package.html" }
+    {
+      "source": "/api/(.*)",
+      "destination": "/api"
+    },
+    {
+      "source": "/p/:name*",
+      "destination": "/package.html"
+    }
   ],
   "headers": [
     {
@@ -20,9 +27,18 @@
           "key": "content-security-policy",
           "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://avatars.githubusercontent.com; connect-src 'self'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; object-src 'none'"
         },
-        { "key": "x-content-type-options", "value": "nosniff" },
-        { "key": "referrer-policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "x-frame-options", "value": "DENY" },
+        {
+          "key": "x-content-type-options",
+          "value": "nosniff"
+        },
+        {
+          "key": "referrer-policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "x-frame-options",
+          "value": "DENY"
+        },
         {
           "key": "permissions-policy",
           "value": "geolocation=(), microphone=(), camera=(), payment=()"
