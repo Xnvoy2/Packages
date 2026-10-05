@@ -2153,3 +2153,29 @@ html::after {
 @media (prefers-reduced-motion: reduce) {
   html::after { display: none; }
 }
+
+/* The X link sits with the nav's quiet controls: an icon the colour of
+   secondary text, lifting to the accent on hover like every other link. */
+.nav__x {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  flex: none;
+  border-radius: 9999px;
+  color: var(--ink-60);
+  /* A little air before the filled call to action, which otherwise sits
+     almost flush against the icon. */
+  margin-right: 6px;
+  transition: color 0.18s var(--ease), background 0.18s var(--ease);
+}
+
+.nav__x:hover { color: var(--brand); background: oklch(100% 0 0 / 0.06); }
+.nav__x svg { display: block; }
+
+/* The narrow nav already hides its secondary links; the icon goes with them
+   rather than crowding the one call to action. */
+@media (max-width: 639px) {
+  .nav__x { display: none; }
+}
