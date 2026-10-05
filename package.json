@@ -25,5 +25,10 @@
     "embedded-postgres": "18.4.0-beta.17",
     "pg-mem": "^3.0.14"
   },
-  "type": "commonjs"
+  "type": "commonjs",
+  "overrides": {
+    "rpc-websockets": {
+      "uuid": "^9.0.1"
+    }
+  }
 }

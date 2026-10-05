@@ -2008,8 +2008,25 @@ html.motion-js .world__ghost {
 }
 
 /* Lenis drives the wheel when it is active, so the browser's own smooth
-   scrolling must get out of the way or the two compete. */
-html.lenis-on { scroll-behavior: auto; }
+   scrolling must get out of the way or the two compete.
+
+   Two selectors, because they are set by different things. `lenis-on` is
+   ours, added when the instance is created. `lenis` and `lenis-smooth` are
+   Lenis's own, and it assigns the whole className when it sets them.
+
+   The !important is the part that matters. Without it the browser animates
+   every scroll position Lenis sets, Lenis reads the lagging position back on
+   the next frame, and the two never converge: the page creeps a few pixels
+   per wheel event and then lurches once the deltas accumulate. */
+html.lenis-on,
+html.lenis.lenis-smooth { scroll-behavior: auto !important; }
+
+/* The rest of what Lenis's own stylesheet requires. A fixed height on either
+   element would stop it scrolling the document at all. */
+html.lenis,
+html.lenis body { height: auto; }
+html.lenis.lenis-stopped { overflow: hidden; }
+html.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
 
 /* ------------------------------------------------------- curved seam --- */
 
