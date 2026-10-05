@@ -17,7 +17,7 @@ process.env.PACKAGES_SESSION_SECRET =
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const lifecycle = require("../lib/lifecycle");
+const lifecycle = require("../_lib/lifecycle");
 const { STATES } = lifecycle;
 
 /* Facts for a package at each stage, built by adding one thing at a time, so

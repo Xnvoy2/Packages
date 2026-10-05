@@ -42,12 +42,12 @@ const assert = require("node:assert/strict");
 const crypto = require("crypto");
 const { PublicKey } = require("@solana/web3.js");
 
-const db = require("../lib/db");
-const session = require("../lib/session");
-const store = require("../lib/store");
-const solana = require("../lib/solana");
-const ratelimit = require("../lib/ratelimit");
-const { server } = require("../index");
+const db = require("../_lib/db");
+const session = require("../_lib/session");
+const store = require("../_lib/store");
+const solana = require("../_lib/solana");
+const ratelimit = require("../_lib/ratelimit");
+const { server } = require("../_server");
 
 const BASE = `http://127.0.0.1:${process.env.PORT}`;
 // Fixture names are suffixed with this so a second run against the same
@@ -628,7 +628,7 @@ test("a malformed transaction signature is refused", async () => {
    so. These drive the reconciler directly, because reaching the confirmed
    branch needs a deployed program, which is deliberately out of scope. */
 test("reconciliation refuses to confirm without a deployed program", async () => {
-  const chain = require("../lib/chain");
+  const chain = require("../_lib/chain");
   const result = await chain.reconcileRegistration({
     signature: "5".repeat(88),
     identityAddress: "11111111111111111111111111111111",
@@ -641,7 +641,7 @@ test("reconciliation refuses to confirm without a deployed program", async () =>
 test("reconciliation treats an unknown signature as not found, never as success", async () => {
   process.env.PACKAGES_PROGRAM_ID = "PkgAcoAFUaVhzP4Ux5GFeMDGsZFNNRvcRnEFmjbVeEa";
   // The config was read at load time, so reach the pure logic directly.
-  const chain = require("../lib/chain");
+  const chain = require("../_lib/chain");
   const original = chain.transactionState;
   const originalAccount = chain.accountState;
   try {
@@ -662,7 +662,7 @@ test("reconciliation treats an unknown signature as not found, never as success"
 
 test("the chain reader tells existence and ownership apart", async (t) => {
   if (!online) return t.skip("needs devnet rpc");
-  const chain = require("../lib/chain");
+  const chain = require("../_lib/chain");
   // A real account that exists but is not ours: existence alone must never be
   // read as a registration.
   const system = await chain.accountState("11111111111111111111111111111111");

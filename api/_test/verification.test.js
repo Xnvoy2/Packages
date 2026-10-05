@@ -28,12 +28,12 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const crypto = require("crypto");
 
-const db = require("../lib/db");
-const store = require("../lib/store");
-const verify = require("../lib/verify");
-const lifecycle = require("../lib/lifecycle");
-const npm = require("../lib/npm");
-const cache = require("../lib/cache");
+const db = require("../_lib/db");
+const store = require("../_lib/store");
+const verify = require("../_lib/verify");
+const lifecycle = require("../_lib/lifecycle");
+const npm = require("../_lib/npm");
+const cache = require("../_lib/cache");
 
 const RUN = crypto.randomBytes(4).toString("hex");
 
@@ -443,15 +443,15 @@ test("case differences are rejected rather than folded", async () => {
   /* Folding would let "Left-Pad" and "left-pad" be treated as one package by
      one surface and two by another. npm names are lowercase; anything else
      is refused at the door. */
-  const validate = require("../lib/validate");
+  const validate = require("../_lib/validate");
   assert.throws(() => validate.packageName("Left-Pad"));
   assert.throws(() => validate.packageName("LEFT-PAD"));
   assert.equal(validate.packageName("left-pad"), "left-pad");
 });
 
 test("a scoped name cannot be confused with its unscoped form", () => {
-  const validate = require("../lib/validate");
-  const solana = require("../lib/solana");
+  const validate = require("../_lib/validate");
+  const solana = require("../_lib/solana");
 
   assert.equal(validate.packageName("@scope/name"), "@scope/name");
   // These are two different packages and must never share an address.
@@ -462,7 +462,7 @@ test("a scoped name cannot be confused with its unscoped form", () => {
 });
 
 test("encoded separators cannot smuggle a second path segment", () => {
-  const validate = require("../lib/validate");
+  const validate = require("../_lib/validate");
   for (const attempt of [
     "@scope%2Fname",
     "@scope/name/extra",
@@ -476,7 +476,7 @@ test("encoded separators cannot smuggle a second path segment", () => {
 test("a repository url the publisher controls cannot redirect verification elsewhere", () => {
   /* The repository field is attacker-controlled. Anything that is not a
      github.com url must not parse into one. */
-  const validate = require("../lib/validate");
+  const validate = require("../_lib/validate");
   for (const hostile of [
     "https://evil.example/github.com/owner/repo",
     "https://github.com.evil.example/owner/repo",

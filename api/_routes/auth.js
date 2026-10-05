@@ -7,13 +7,13 @@
 "use strict";
 
 const crypto = require("crypto");
-const { config } = require("../lib/env");
-const { send, redirect, badRequest, HttpError } = require("../lib/http");
-const session = require("../lib/session");
-const github = require("../lib/github");
-const store = require("../lib/store");
-const present = require("../lib/present");
-const lifecycle = require("../lib/lifecycle");
+const { config } = require("../_lib/env");
+const { send, redirect, badRequest, HttpError } = require("../_lib/http");
+const session = require("../_lib/session");
+const github = require("../_lib/github");
+const store = require("../_lib/store");
+const present = require("../_lib/present");
+const lifecycle = require("../_lib/lifecycle");
 
 const STATE_COOKIE = "packages_oauth_state";
 
@@ -115,7 +115,7 @@ async function me(req, res) {
   /* Release history per claimed package, so the dashboard shows what has
      actually been published rather than only the claim state. Read from the
      local record, which is what an onchain release record would commit to. */
-  const solana = require("../lib/solana");
+  const solana = require("../_lib/solana");
   const clusterState = await solana.clusterStatus();
   const registrations = {};
   for (const pkg of packages) {
@@ -159,7 +159,7 @@ async function me(req, res) {
 /* A claim row as the dashboard wants it: the four proofs, the status computed
    by the one rule in verify.js, and what to do next. */
 function claimRow(row, context) {
-  const verify = require("../lib/verify");
+  const verify = require("../_lib/verify");
   const ctx = context || {};
   return {
     name: row.name,

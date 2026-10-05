@@ -27,14 +27,14 @@ const {
   readJson,
   notFound,
   conflict,
-} = require("../lib/http");
-const { config } = require("../lib/env");
-const validate = require("../lib/validate");
-const session = require("../lib/session");
-const solana = require("../lib/solana");
-const chain = require("../lib/chain");
-const store = require("../lib/store");
-const db = require("../lib/db");
+} = require("../_lib/http");
+const { config } = require("../_lib/env");
+const validate = require("../_lib/validate");
+const session = require("../_lib/session");
+const solana = require("../_lib/solana");
+const chain = require("../_lib/chain");
+const store = require("../_lib/store");
+const db = require("../_lib/db");
 
 async function status(req, res) {
   const cluster = await solana.clusterStatus();

@@ -7,13 +7,13 @@
 
 "use strict";
 
-const { send, readJson, badRequest } = require("../lib/http");
-const { config } = require("../lib/env");
-const validate = require("../lib/validate");
-const session = require("../lib/session");
-const verify = require("../lib/verify");
-const solana = require("../lib/solana");
-const store = require("../lib/store");
+const { send, readJson, badRequest } = require("../_lib/http");
+const { config } = require("../_lib/env");
+const validate = require("../_lib/validate");
+const session = require("../_lib/session");
+const verify = require("../_lib/verify");
+const solana = require("../_lib/solana");
+const store = require("../_lib/store");
 
 async function challenge(req, res) {
   const current = await session.require(req);
@@ -86,7 +86,7 @@ async function remove(req, res) {
   const current = await session.require(req);
   const body = await readJson(req);
   const pubkey = validate.solanaPubkey(body.pubkey);
-  const db = require("../lib/db");
+  const db = require("../_lib/db");
   await db.query("delete from wallets where user_id = $1 and pubkey = $2", [
     current.user.id,
     pubkey,

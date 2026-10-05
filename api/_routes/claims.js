@@ -6,14 +6,14 @@
 "use strict";
 
 const crypto = require("crypto");
-const { send, readJson, badRequest, conflict, HttpError } = require("../lib/http");
-const validate = require("../lib/validate");
-const session = require("../lib/session");
-const npm = require("../lib/npm");
-const verify = require("../lib/verify");
-const store = require("../lib/store");
-const db = require("../lib/db");
-const solana = require("../lib/solana");
+const { send, readJson, badRequest, conflict, HttpError } = require("../_lib/http");
+const validate = require("../_lib/validate");
+const session = require("../_lib/session");
+const npm = require("../_lib/npm");
+const verify = require("../_lib/verify");
+const store = require("../_lib/store");
+const db = require("../_lib/db");
+const solana = require("../_lib/solana");
 const { claimRow } = require("./auth");
 
 /* --------------------------------------------------------------- import -- */

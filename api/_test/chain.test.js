@@ -21,7 +21,7 @@ process.env.PACKAGES_PROGRAM_ID = "PkgAcoAFUaVhzP4Ux5GFeMDGsZFNNRvcRnEFmjbVeEa";
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const chain = require("../lib/chain");
+const chain = require("../_lib/chain");
 
 const OURS = process.env.PACKAGES_PROGRAM_ID;
 const ADDRESS = "GkoTSW9X1hTb4QYCDWEYC9n6BpnWwpgL8rfmTQGUFa5A";
@@ -172,11 +172,11 @@ test("no program configured blocks reconciliation entirely", async () => {
   const saved = process.env.PACKAGES_PROGRAM_ID;
   delete process.env.PACKAGES_PROGRAM_ID;
   // The config is read at load, so this one case needs a fresh module graph.
-  const chainPath = require.resolve("../lib/chain");
-  const envPath = require.resolve("../lib/env");
+  const chainPath = require.resolve("../_lib/chain");
+  const envPath = require.resolve("../_lib/env");
   delete require.cache[chainPath];
   delete require.cache[envPath];
-  const fresh = require("../lib/chain");
+  const fresh = require("../_lib/chain");
   try {
     const r = await fresh.reconcileRegistration({
       signature: SIGNATURE,

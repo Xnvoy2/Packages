@@ -70,7 +70,7 @@ build.on("exit", (code) => {
     process.exit(code || 1);
   }
   run("site", ["tools/serve.js"]);
-  run("api", ["api/index.js"], {
+  run("api", ["api/_server.js"], {
     PACKAGES_DEV_DB: process.env.DATABASE_URL ? "" : "memory",
   });
 });

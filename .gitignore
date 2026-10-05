@@ -8,3 +8,4 @@ solana/target/
 .vercel/
 .DS_Store
 sitemap.xml
+dist/

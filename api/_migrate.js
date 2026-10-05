@@ -10,8 +10,8 @@
 
 "use strict";
 
-const db = require("./lib/db");
-const { config } = require("./lib/env");
+const db = require("./_lib/db");
+const { config } = require("./_lib/env");
 
 async function main() {
   if (!config.databaseUrl && config.devDb !== "memory") {

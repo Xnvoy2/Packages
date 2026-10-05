@@ -2,17 +2,17 @@
 
 "use strict";
 
-const { send, notFound, badRequest, forbidden } = require("../lib/http");
-const validate = require("../lib/validate");
-const npm = require("../lib/npm");
-const github = require("../lib/github");
-const db = require("../lib/db");
-const store = require("../lib/store");
-const present = require("../lib/present");
-const solana = require("../lib/solana");
-const lifecycle = require("../lib/lifecycle");
-const refresh = require("../lib/refresh");
-const cache = require("../lib/cache");
+const { send, notFound, badRequest, forbidden } = require("../_lib/http");
+const validate = require("../_lib/validate");
+const npm = require("../_lib/npm");
+const github = require("../_lib/github");
+const db = require("../_lib/db");
+const store = require("../_lib/store");
+const present = require("../_lib/present");
+const solana = require("../_lib/solana");
+const lifecycle = require("../_lib/lifecycle");
+const refresh = require("../_lib/refresh");
+const cache = require("../_lib/cache");
 
 /* A sample of widely used packages, shown on the homepage when nothing has
    been verified yet so the grid demonstrates real data rather than invented
@@ -262,8 +262,8 @@ module.exports = { search, featured, detail, versions, contributors, SAMPLE };
    request would be an easy way to make this server spend its rate limit for
    somebody else. */
 async function refreshOne(req, res, ctx) {
-  const session = require("../lib/session");
-  const refresh = require("../lib/refresh");
+  const session = require("../_lib/session");
+  const refresh = require("../_lib/refresh");
   const current = await session.require(req);
   const name = validate.packageName(ctx.params.name);
 

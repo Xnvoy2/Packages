@@ -10,26 +10,26 @@
 "use strict";
 
 const http = require("http");
-const { config } = require("./lib/env");
+const { config } = require("./_lib/env");
 const {
   send,
   sendError,
   notFound,
   corsHeaders,
   HttpError,
-} = require("./lib/http");
-const ratelimit = require("./lib/ratelimit");
-const db = require("./lib/db");
-const session = require("./lib/session");
+} = require("./_lib/http");
+const ratelimit = require("./_lib/ratelimit");
+const db = require("./_lib/db");
+const session = require("./_lib/session");
 
-const packages = require("./routes/packages");
-const auth = require("./routes/auth");
-const claims = require("./routes/claims");
-const wallet = require("./routes/wallet");
-const activity = require("./routes/activity");
-const identity = require("./routes/identity");
-const solana = require("./lib/solana");
-const refresh = require("./lib/refresh");
+const packages = require("./_routes/packages");
+const auth = require("./_routes/auth");
+const claims = require("./_routes/claims");
+const wallet = require("./_routes/wallet");
+const activity = require("./_routes/activity");
+const identity = require("./_routes/identity");
+const solana = require("./_lib/solana");
+const refresh = require("./_lib/refresh");
 
 /* ---------------------------------------------------------------- routes -- */
 
@@ -109,8 +109,8 @@ async function publicConfig(req, res) {
       blocker: cluster.blocker,
     },
     proof: {
-      field: require("./lib/verify").PROOF_FIELD,
-      keywordPrefix: require("./lib/verify").PROOF_KEYWORD_PREFIX,
+      field: require("./_lib/verify").PROOF_FIELD,
+      keywordPrefix: require("./_lib/verify").PROOF_KEYWORD_PREFIX,
     },
   });
 }

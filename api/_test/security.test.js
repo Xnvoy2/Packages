@@ -28,12 +28,12 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const crypto = require("crypto");
 
-const db = require("../lib/db");
-const store = require("../lib/store");
-const session = require("../lib/session");
-const validate = require("../lib/validate");
-const ratelimit = require("../lib/ratelimit");
-const { server } = require("../index");
+const db = require("../_lib/db");
+const store = require("../_lib/store");
+const session = require("../_lib/session");
+const validate = require("../_lib/validate");
+const ratelimit = require("../_lib/ratelimit");
+const { server } = require("../_server");
 
 const BASE = `http://127.0.0.1:${process.env.PORT}`;
 const RUN = crypto.randomBytes(4).toString("hex");

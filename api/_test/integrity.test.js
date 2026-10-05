@@ -27,9 +27,9 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const crypto = require("crypto");
 
-const db = require("../lib/db");
-const store = require("../lib/store");
-const verify = require("../lib/verify");
+const db = require("../_lib/db");
+const store = require("../_lib/store");
+const verify = require("../_lib/verify");
 
 const RUN = crypto.randomBytes(4).toString("hex");
 const realPostgres = Boolean(process.env.DATABASE_URL);

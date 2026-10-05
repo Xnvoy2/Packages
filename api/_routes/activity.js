@@ -14,13 +14,13 @@
 
 "use strict";
 
-const { send } = require("../lib/http");
-const validate = require("../lib/validate");
-const db = require("../lib/db");
-const npm = require("../lib/npm");
-const github = require("../lib/github");
-const store = require("../lib/store");
-const present = require("../lib/present");
+const { send } = require("../_lib/http");
+const validate = require("../_lib/validate");
+const db = require("../_lib/db");
+const npm = require("../_lib/npm");
+const github = require("../_lib/github");
+const store = require("../_lib/store");
+const present = require("../_lib/present");
 
 async function feed(req, res, ctx) {
   const limit = validate.limit(ctx.url.searchParams.get("limit"), 30, 60);

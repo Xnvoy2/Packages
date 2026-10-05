@@ -13,11 +13,11 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const crypto = require("crypto");
 
-const validate = require("../lib/validate");
-const verify = require("../lib/verify");
-const ratelimit = require("../lib/ratelimit");
-const solana = require("../lib/solana");
-const { matchPath } = require("../index");
+const validate = require("../_lib/validate");
+const verify = require("../_lib/verify");
+const ratelimit = require("../_lib/ratelimit");
+const solana = require("../_lib/solana");
+const { matchPath } = require("../_server");
 
 /* ---------------------------------------------------------- validation -- */
 
@@ -197,8 +197,8 @@ test("trusted publisher: compares repository id, not name", async () => {
     latestVersion: "1.0.0",
     releases: [{ version: "1.0.0", present: true }],
   };
-  const npm = require("../lib/npm");
-  const cache = require("../lib/cache");
+  const npm = require("../_lib/npm");
+  const cache = require("../_lib/cache");
   cache.clear();
   // Stand in for the registry so the test needs no network.
   const original = npm.provenance;
@@ -278,7 +278,7 @@ test("rate limit: buckets are separate per route group", () => {
 /* --------------------------------------------------------------- router -- */
 
 test("router: a literal route is not swallowed by a parameter route", () => {
-  const { match } = require("../index");
+  const { match } = require("../_server");
   assert.equal(match("GET", "/api/packages/search").pattern, "/api/packages/search");
   assert.equal(match("GET", "/api/packages/featured").pattern, "/api/packages/featured");
   assert.equal(match("GET", "/api/packages/left-pad").pattern, "/api/packages/:name");

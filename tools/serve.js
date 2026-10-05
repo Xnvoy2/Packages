@@ -66,7 +66,7 @@ const TYPES = {
    immediately instead of on the first request. */
 let embeddedApi = null;
 if (process.env.PACKAGES_EMBED_API === "1") {
-  const api = require("../api/index.js");
+  const api = require("../api/_server.js");
   embeddedApi = api.handleRequest;
   api
     .migrate()

@@ -19,10 +19,10 @@ process.env.PACKAGES_SESSION_SECRET =
 const test = require("node:test");
 const assert = require("node:assert/strict");
 
-const github = require("../lib/github");
-const verify = require("../lib/verify");
-const { config } = require("../lib/env");
-const cache = require("../lib/cache");
+const github = require("../_lib/github");
+const verify = require("../_lib/verify");
+const { config } = require("../_lib/env");
+const cache = require("../_lib/cache");
 
 /* GitHub allows 60 unauthenticated requests an hour for the whole machine,
    and this suite is not the only thing using them. Checked once, so the live

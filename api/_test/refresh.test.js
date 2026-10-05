@@ -23,11 +23,11 @@ const test = require("node:test");
 const assert = require("node:assert/strict");
 const crypto = require("crypto");
 
-const db = require("../lib/db");
-const store = require("../lib/store");
-const refresh = require("../lib/refresh");
-const npm = require("../lib/npm");
-const cache = require("../lib/cache");
+const db = require("../_lib/db");
+const store = require("../_lib/store");
+const refresh = require("../_lib/refresh");
+const npm = require("../_lib/npm");
+const cache = require("../_lib/cache");
 
 const RUN = crypto.randomBytes(4).toString("hex");
 const PKG = `fixture-refresh-${RUN}`;
