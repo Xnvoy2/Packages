@@ -55,10 +55,10 @@ const ICONS = {
 // it reads as a package at 18px as well as at 20px.
 const mark = (size) => `<svg class="nav__mark" width="${size}" height="${size}" viewBox="0 0 24 24" fill="none" aria-hidden="true">
       <rect width="24" height="24" rx="7" fill="url(#mk)"/>
-      <path d="M12 6.4 17.8 9.5v5.9L12 18.5 6.2 15.4V9.5z" stroke="#fff" stroke-width="1.45" stroke-linejoin="round"/>
-      <path d="M6.2 9.5 12 12.6l5.8-3.1M12 12.6v5.9" stroke="#fff" stroke-width="1.45" stroke-linejoin="round"/>
+      <path d="M12 6.4 17.8 9.5v5.9L12 18.5 6.2 15.4V9.5z" stroke="#0A0A0B" stroke-width="1.45" stroke-linejoin="round"/>
+      <path d="M6.2 9.5 12 12.6l5.8-3.1M12 12.6v5.9" stroke="#0A0A0B" stroke-width="1.45" stroke-linejoin="round"/>
       <defs><linearGradient id="mk" x1="0" y1="0" x2="24" y2="24">
-        <stop stop-color="#7C4DFF"/><stop offset="1" stop-color="#C04DFF"/>
+        <stop stop-color="#FDFB04"/><stop offset="1" stop-color="#E9E200"/>
       </linearGradient></defs>
     </svg>`;
 
@@ -94,7 +94,7 @@ const head = (name, title, description) => `<!doctype html>
 <title>${title}</title>
 <meta name="description" content="${description}">
 <meta name="color-scheme" content="light">
-<meta name="theme-color" content="#111014">
+<meta name="theme-color" content="#0A0A0B">
 <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">

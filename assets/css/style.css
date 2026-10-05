@@ -6,35 +6,56 @@
 :root {
   --radius: 1rem;
 
-  --background: oklch(98.5% 0.004 285);
-  --foreground: oklch(16% 0.01 280);
-  --ink: oklch(13% 0.012 285);
-  --card: oklch(100% 0 0);
-  --muted: oklch(96.5% 0.006 285);
-  --muted-foreground: oklch(55% 0.018 285);
-  --border: oklch(92% 0.008 285);
+  /* The brand accent, sampled from the reference artwork (#FDFB04). Every
+     yellow on the site resolves to this one value. */
+  --brand: oklch(95.81% 0.2077 109.2);
+  --brand-dim: oklch(86% 0.18 109.2);
+  --brand-ink: oklch(14.5% 0.002 286);   /* text that sits on the yellow */
+  --brand-tint: oklch(26% 0.07 109.2);   /* yellow-tinted dark surface */
+  --brand-line: oklch(95.81% 0.2077 109.2 / 0.38);
 
-  --violet: oklch(55% 0.245 293);
-  --violet-soft: oklch(88% 0.075 293);
-  --coral: oklch(72% 0.16 32);
-  --sky: oklch(78% 0.11 240);
+  --background: oklch(14.5% 0.002 286);
+  --foreground: oklch(94.7% 0.003 286);
+  --ink: oklch(94.7% 0.003 286);
+  --card: oklch(19.2% 0.004 286);
+  --muted: oklch(22.8% 0.006 286);
+  --muted-foreground: oklch(68.9% 0.012 286);
+  --border: oklch(28.7% 0.007 286);
 
-  --glass: oklch(100% 0 0 / 0.62);
-  --glass-strong: oklch(100% 0 0 / 0.82);
-  --hairline: oklch(20% 0.02 285 / 0.08);
+  /* Ink at the alphas the sheet uses for secondary and tertiary text. */
+  --ink-78: oklch(94.7% 0.003 286 / 0.78);
+  --ink-65: oklch(94.7% 0.003 286 / 0.65);
+  --ink-62: oklch(94.7% 0.003 286 / 0.62);
+  --ink-60: oklch(94.7% 0.003 286 / 0.6);
+  --ink-35: oklch(94.7% 0.003 286 / 0.35);
+  --ink-30: oklch(94.7% 0.003 286 / 0.3);
+  --ink-22: oklch(94.7% 0.003 286 / 0.22);
 
-  --shadow-soft: 0 1px 2px oklch(20% 0.02 285 / 0.04), 0 12px 32px oklch(30% 0.06 293 / 0.07);
-  --shadow-lift: 0 2px 6px oklch(20% 0.02 285 / 0.05), 0 24px 60px oklch(30% 0.08 293 / 0.12);
+  /* The old palette kept its names so nothing downstream had to be renamed.
+     The brand hue is now the sampled yellow; the status hues keep their
+     meaning and move to lightnesses that read on a dark ground. */
+  --violet: var(--brand);
+  --violet-soft: var(--brand-tint);
+  --coral: oklch(80% 0.006 286);
+  --sky: oklch(76% 0.008 286);
 
-  --atmosphere: linear-gradient(180deg, oklch(97.3% 0.006 245), oklch(99.5% 0.002 260) 58%, oklch(98.6% 0.003 250));
+  --glass: oklch(19.2% 0.004 286 / 0.62);
+  --glass-strong: oklch(19.2% 0.004 286 / 0.84);
+  --hairline: oklch(100% 0 0 / 0.1);
+
+  /* Shadows on a dark ground come from deeper black, not from tinted grey. */
+  --shadow-soft: 0 1px 2px oklch(0% 0 0 / 0.5), 0 12px 32px oklch(0% 0 0 / 0.45);
+  --shadow-lift: 0 2px 6px oklch(0% 0 0 / 0.55), 0 24px 60px oklch(0% 0 0 / 0.6);
+
+  --atmosphere: linear-gradient(180deg, oklch(13.5% 0.003 286), oklch(16% 0.004 286) 58%, oklch(14% 0.003 286));
 
   /* decorative "developer surface" panels behind the hero */
-  --dev-line: oklch(39% 0.018 255 / 0.14);
-  --dev-text: oklch(31% 0.014 260);
-  --dev-dim: oklch(52% 0.015 260);
-  --dev-blue: oklch(54% 0.048 244);
-  --dev-panel: oklch(99.5% 0.002 245 / 0.86);
-  --dev-panel-shadow: 0 20px 70px oklch(28% 0.025 250 / 0.08), 0 2px 12px oklch(28% 0.025 250 / 0.04);
+  --dev-line: oklch(100% 0 0 / 0.1);
+  --dev-text: oklch(88% 0.004 286);
+  --dev-dim: oklch(62% 0.01 286);
+  --dev-blue: oklch(72% 0.008 286);
+  --dev-panel: oklch(20.5% 0.005 286 / 0.9);
+  --dev-panel-shadow: 0 20px 70px oklch(0% 0 0 / 0.55), 0 2px 12px oklch(0% 0 0 / 0.4);
 
   --sans: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
   --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -103,10 +124,11 @@ ul { list-style: none; }
   top: 0;
   height: 900px;
   pointer-events: none;
-  background:
-    radial-gradient(620px 380px at 50% 26%, oklch(70% 0.12 293 / 0.10), transparent 70%),
-    radial-gradient(520px 320px at 16% 44%, oklch(78% 0.09 240 / 0.08), transparent 72%),
-    radial-gradient(520px 320px at 86% 38%, oklch(80% 0.08 320 / 0.07), transparent 72%);
+  /* Deliberately empty. Three coloured washes used to sit here and they read
+     as stage lighting rather than as a dark surface. Tinting them yellow
+     would be the same effect in the brand colour, so they are gone instead.
+     The element stays so the hero's stacking and positioning are unchanged. */
+  background: none;
 }
 
 .shell {
@@ -121,7 +143,7 @@ ul { list-style: none; }
 .rail { max-width: var(--rail); margin-inline: auto; }
 
 main { position: relative; z-index: 10; }
-.ca-bar__copy.is-done { color: oklch(84% 0.16 150); }
+.ca-bar__copy.is-done { color: var(--brand); }
 
 /* ----------------------------------------------------------- nav pill -- */
 
@@ -177,12 +199,12 @@ main { position: relative; z-index: 10; }
   border-radius: 9999px;
   font-size: 13.5px;
   white-space: nowrap;
-  color: oklch(13% 0.012 285 / 0.62);
+  color: var(--ink-62);
   transition: color 0.18s, background-color 0.18s;
 }
 
-.nav__link:hover { color: var(--ink); background: oklch(20% 0.02 285 / 0.05); }
-.nav__link[aria-current="page"] { color: var(--ink); background: oklch(20% 0.02 285 / 0.06); }
+.nav__link:hover { color: var(--ink); background: oklch(0% 0 0 / 0.5); }
+.nav__link[aria-current="page"] { color: var(--ink); background: oklch(100% 0 0 / 0.08); }
 
 .nav__spacer { flex: 1; }
 
@@ -219,8 +241,8 @@ main { position: relative; z-index: 10; }
 .btn--sm { height: 36px; padding-inline: 16px; font-size: 13px; }
 .btn--lg { height: 56px; padding-inline: 28px; font-size: 15px; }
 
-.btn--ink { background: var(--ink); color: #fff; }
-.btn--ink:hover { background: oklch(22% 0.015 285); box-shadow: var(--shadow-lift); }
+.btn--ink { background: var(--brand); color: var(--brand-ink); }
+.btn--ink:hover { background: oklch(80% 0.01 286); box-shadow: var(--shadow-lift); }
 
 .btn--glass {
   background: var(--glass);
@@ -230,7 +252,7 @@ main { position: relative; z-index: 10; }
   -webkit-backdrop-filter: blur(16px);
 }
 
-.btn--glass:hover { background: oklch(100% 0 0 / 0.86); box-shadow: var(--shadow-lift); }
+.btn--glass:hover { background: oklch(24% 0.005 286 / 0.92); box-shadow: var(--shadow-lift); }
 
 /* ------------------------------------------------------------ forms ---- */
 
@@ -246,13 +268,13 @@ main { position: relative; z-index: 10; }
   font-family: var(--mono);
   font-size: 13px;
   color: var(--ink);
-  background: oklch(100% 0 0 / 0.7);
+  background: oklch(21% 0.005 286 / 0.8);
   transition: border-color 0.2s, box-shadow 0.25s var(--ease), background-color 0.2s;
 }
 
-.field::placeholder { color: oklch(13% 0.012 285 / 0.6); }
+.field::placeholder { color: var(--ink-60); }
 
-.field:hover { background: oklch(100% 0 0 / 0.82); }
+.field:hover { background: oklch(22% 0.005 286 / 0.88); }
 
 .field:focus {
   outline: 0;
@@ -300,7 +322,7 @@ main { position: relative; z-index: 10; }
   margin: 24px auto 0;
   font-size: 15px;
   line-height: 1.625;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 .hero__cta {
@@ -320,10 +342,10 @@ main { position: relative; z-index: 10; }
   margin-top: 28px;
   padding: 8px 16px;
   border: 1px solid var(--hairline);
-  background: oklch(98.5% 0.004 285 / 0.7);
+  background: oklch(14.5% 0.002 286 / 0.72);
   font-family: var(--mono);
   font-size: 11px;
-  color: oklch(13% 0.012 285 / 0.65);
+  color: var(--ink-65);
 }
 
 .pulse-dot {
@@ -378,7 +400,7 @@ main { position: relative; z-index: 10; }
   top: 32px;
   font-family: var(--mono);
   font-size: 11px;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 .hero__graph-caption span { padding-inline: 12px; }
@@ -442,7 +464,7 @@ main { position: relative; z-index: 10; }
 .world__body--gap { gap: 12px; }
 .world__body--pad { padding: 10px; }
 .world__bar--foot { border-bottom: 0; border-top: 1px solid var(--dev-line); }
-.world__status { margin-left: auto; width: 5px; height: 5px; border-radius: 50%; background: oklch(60% 0.2 150); }
+.world__status { margin-left: auto; width: 5px; height: 5px; border-radius: 50%; background: var(--brand); }
 .world__row svg { flex: none; color: var(--dev-dim); }
 .world__dim { color: var(--dev-dim); }
 
@@ -450,7 +472,7 @@ main { position: relative; z-index: 10; }
 .world__code-line { display: flex; gap: 10px; white-space: pre; }
 .world__ln { color: var(--dev-line); width: 14px; flex: none; }
 
-.world__kw { color: oklch(48% 0.16 300); }
+.world__kw { color: oklch(76% 0.008 286); }
 .world__fn { color: var(--dev-blue); }
 
 .world__caret {
@@ -482,7 +504,7 @@ main { position: relative; z-index: 10; }
      The whole .world layer is aria-hidden decoration that no reader is meant
      to read, and darkening it would turn a background texture into content
      competing with the headline. */
-  color: oklch(13% 0.012 285 / 0.22);
+  color: var(--ink-22);
   display: inline-flex;
   align-items: center;
   gap: 6px;
@@ -576,7 +598,7 @@ main { position: relative; z-index: 10; }
   margin-top: 18px;
   font-size: 15px;
   line-height: 1.65;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 .page-head { padding-top: 190px; padding-bottom: 8px; }
@@ -593,10 +615,17 @@ main { position: relative; z-index: 10; }
 .pkg {
   position: relative;
   min-width: 0; /* grid items default to min-width:auto and would overflow */
+  /* A column, so the four bands (preview, name, stats, actions) can be held
+     level with the card beside them. The sections were stacked by margin
+     alone, so a description wrapping to a different number of lines pushed
+     everything below it out of line with its neighbour. */
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   padding: 16px;
   border: 1px solid var(--hairline);
   border-radius: 24px;
-  background: oklch(100% 0 0 / 0.5);
+  background: oklch(19.2% 0.004 286 / 0.5);
   box-shadow: var(--shadow-soft);
   transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
@@ -628,13 +657,13 @@ main { position: relative; z-index: 10; }
 }
 
 .repo__avatar[style*="--h"] {
-  background: oklch(92% 0.06 var(--h));
-  color: oklch(40% 0.14 var(--h));
+  background: var(--muted);
+  color: var(--ink-78);
 }
 
 .repo__id { min-width: 0; flex: 1; }
 
-.repo__name { font-size: 14px; color: oklch(13% 0.012 285 / 0.62); }
+.repo__name { font-size: 14px; color: var(--ink-62); }
 .repo__name b { font-weight: 500; color: var(--ink); }
 
 .repo__url {
@@ -645,7 +674,7 @@ main { position: relative; z-index: 10; }
   margin-top: 2px;
   font-family: var(--mono);
   font-size: 11px;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 /* One line, ellipsised. Wrapping split the url mid-token and left the icon
@@ -664,18 +693,22 @@ main { position: relative; z-index: 10; }
   font-family: var(--mono);
   font-size: 10.5px;
   letter-spacing: 0.02em;
-  color: oklch(13% 0.012 285 / 0.62);
+  color: var(--ink-62);
 }
 
 .repo__desc {
   margin-top: 14px;
   font-size: 14.5px;
   line-height: 1.5;
-  color: oklch(13% 0.012 285 / 0.78);
+  color: var(--ink-78);
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  /* Three lines whether the registry gives one or five, so the block below
+     starts at the same height on every card. The clamp alone only caps the
+     tall ones; this holds the short ones open. 1.5 line-height x 3. */
+  min-height: calc(14.5px * 1.5 * 3);
 }
 
 .repo__meta {
@@ -685,21 +718,30 @@ main { position: relative; z-index: 10; }
   gap: 14px;
   margin-top: 14px;
   font-size: 12px;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 .repo__meta span { display: inline-flex; align-items: center; gap: 5px; }
 .lang-dot { width: 8px; height: 8px; border-radius: 50%; flex: none; }
 .tag-archived { color: var(--coral); }
 
-.repo__topics { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.repo__topics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 14px;
+  /* One row. A second row of chips made one card taller than the card beside
+     it, which is the misalignment this pass is removing. */
+  max-height: 26px;
+  overflow: hidden;
+}
 
 .topic {
   padding: 4px 10px;
   border-radius: 9999px;
-  background: oklch(96% 0.012 293);
+  background: oklch(24% 0.03 109.2);
   font-size: 11px;
-  color: oklch(45% 0.08 293);
+  color: oklch(72% 0.1 109.2);
 }
 
 /* package body */
@@ -725,7 +767,7 @@ main { position: relative; z-index: 10; }
 
 .stat__label {
   font-size: 11px;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
   margin-bottom: 2px;
 }
 
@@ -744,11 +786,15 @@ main { position: relative; z-index: 10; }
   display: flex;
   align-items: center;
   gap: 14px;
-  margin-top: 16px;
+  /* auto, not a fixed margin: this is what puts every card's actions on
+     the same baseline as its neighbour. The 16px minimum is preserved so
+     spacing is unchanged on a card that already filled its height. */
+  margin-top: auto;
+  padding-top: 16px;
   padding-inline: 2px;
 }
 
-.pkg__ago { font-size: 12px; color: oklch(13% 0.012 285 / 0.6); }
+.pkg__ago { font-size: 12px; color: var(--ink-60); }
 
 .kv-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 20px; }
 .kv-grid > * { min-width: 0; }
@@ -757,10 +803,10 @@ main { position: relative; z-index: 10; }
   padding: 14px 16px;
   border: 1px solid var(--hairline);
   border-radius: 16px;
-  background: oklch(100% 0 0 / 0.6);
+  background: oklch(19.2% 0.004 286 / 0.6);
 }
 
-.kv__k { font-size: 11px; color: oklch(13% 0.012 285 / 0.6); }
+.kv__k { font-size: 11px; color: var(--ink-60); }
 .kv__v { margin-top: 3px; font-size: 15px; letter-spacing: -0.01em; }
 .kv__v--mono {
   font-family: var(--mono);
@@ -787,7 +833,7 @@ main { position: relative; z-index: 10; }
   inset-block: 0;
   left: 0;
   width: 0;
-  background: linear-gradient(90deg, oklch(70% 0.2 320), var(--violet));
+  background: linear-gradient(90deg, var(--brand), var(--violet));
 }
 
 .lifecycle__bead {
@@ -797,8 +843,11 @@ main { position: relative; z-index: 10; }
   width: 18px; height: 18px;
   margin: -9px 0 0 -9px;
   border-radius: 50%;
-  background: radial-gradient(circle at 34% 30%, oklch(92% 0.06 300), var(--violet) 68%);
-  box-shadow: 0 0 0 6px oklch(55% 0.245 293 / 0.12), 0 6px 18px oklch(55% 0.245 293 / 0.35);
+  /* Flat accent, and a ring in the page colour rather than a halo: the glow
+     was lighting, which this palette does not use. Size and position are
+     unchanged, so the pinned sequence tracks exactly as before. */
+  background: var(--brand);
+  box-shadow: 0 0 0 5px var(--background);
 }
 
 .lifecycle__steps {
@@ -829,7 +878,7 @@ main { position: relative; z-index: 10; }
   margin-top: 10px;
   font-size: 13.5px;
   line-height: 1.6;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 /* ------------------------------------------------------------- fees ---- */
@@ -840,7 +889,7 @@ main { position: relative; z-index: 10; }
   padding: 26px;
   border: 1px solid var(--hairline);
   border-radius: 24px;
-  background: oklch(100% 0 0 / 0.62);
+  background: oklch(19.2% 0.004 286 / 0.62);
   box-shadow: var(--shadow-soft);
   transition: transform 0.4s var(--ease), box-shadow 0.4s var(--ease);
 }
@@ -852,7 +901,7 @@ main { position: relative; z-index: 10; }
   place-items: center;
   width: 36px; height: 36px;
   border-radius: 12px;
-  background: oklch(96% 0.03 293);
+  background: var(--brand-tint);
   color: var(--violet);
   margin-bottom: 26px;
 }
@@ -863,7 +912,7 @@ main { position: relative; z-index: 10; }
   margin-top: 10px;
   font-size: 13.5px;
   line-height: 1.6;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 .split {
@@ -871,13 +920,13 @@ main { position: relative; z-index: 10; }
   padding: 24px 26px;
   border: 1px solid var(--hairline);
   border-radius: 24px;
-  background: oklch(100% 0 0 / 0.62);
+  background: oklch(19.2% 0.004 286 / 0.62);
   box-shadow: var(--shadow-soft);
 }
 
 .split--loose { margin-top: 40px; }
 
-.split__label { font-size: 12.5px; color: oklch(13% 0.012 285 / 0.6); }
+.split__label { font-size: 12.5px; color: var(--ink-60); }
 
 /* ------------------------------------------------------------ steps ---- */
 
@@ -890,7 +939,7 @@ main { position: relative; z-index: 10; }
   padding: 28px;
   border: 1px solid var(--hairline);
   border-radius: 24px;
-  background: oklch(100% 0 0 / 0.6);
+  background: oklch(19.2% 0.004 286 / 0.6);
   box-shadow: var(--shadow-soft);
 }
 
@@ -906,7 +955,7 @@ main { position: relative; z-index: 10; }
   margin-top: 10px;
   font-size: 14px;
   line-height: 1.65;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 .step__list { display: grid; gap: 8px; margin-top: 16px; }
@@ -915,7 +964,7 @@ main { position: relative; z-index: 10; }
   display: flex;
   gap: 9px;
   font-size: 13px;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 .step__list li::before { content: "—"; color: var(--violet-soft); flex: none; }
@@ -928,11 +977,11 @@ main { position: relative; z-index: 10; }
   padding: 24px;
   border: 1px solid var(--hairline);
   border-radius: 24px;
-  background: oklch(100% 0 0 / 0.62);
+  background: oklch(19.2% 0.004 286 / 0.62);
   box-shadow: var(--shadow-soft);
 }
 
-.stat-card__k { font-size: 12.5px; color: oklch(13% 0.012 285 / 0.6); }
+.stat-card__k { font-size: 12.5px; color: var(--ink-60); }
 
 .stat-card__v {
   margin-top: 12px;
@@ -941,7 +990,7 @@ main { position: relative; z-index: 10; }
   font-variant-numeric: tabular-nums;
 }
 
-.stat-card__n { margin-top: 10px; font-size: 12px; color: oklch(13% 0.012 285 / 0.6); }
+.stat-card__n { margin-top: 10px; font-size: 12px; color: var(--ink-60); }
 
 .empty {
   display: grid;
@@ -951,11 +1000,11 @@ main { position: relative; z-index: 10; }
   border: 1px dashed var(--border);
   border-radius: 24px;
   text-align: center;
-  background: oklch(100% 0 0 / 0.4);
+  background: oklch(100% 0 0 / 0.07);
 }
 
 .empty__title { font-size: 17px; font-weight: 500; letter-spacing: -0.02em; }
-.empty__copy { max-width: 400px; font-size: 13.5px; line-height: 1.6; color: oklch(13% 0.012 285 / 0.6); }
+.empty__copy { max-width: 400px; font-size: 13.5px; line-height: 1.6; color: var(--ink-60); }
 .empty .btn { margin-top: 8px; }
 
 /* ----------------------------------------------------------- footer ---- */
@@ -973,8 +1022,8 @@ main { position: relative; z-index: 10; }
 }
 
 .footer__brand { display: inline-flex; align-items: center; gap: 10px; font-size: 14px; }
-.footer__note { font-size: 13px; color: oklch(13% 0.012 285 / 0.6); }
-.footer__links { display: flex; flex-wrap: wrap; gap: 20px; font-size: 13px; color: oklch(13% 0.012 285 / 0.6); }
+.footer__note { font-size: 13px; color: var(--ink-60); }
+.footer__links { display: flex; flex-wrap: wrap; gap: 20px; font-size: 13px; color: var(--ink-60); }
 .footer__links a:hover { color: var(--ink); }
 
 /* ------------------------------------------------------ mobile tabbar -- */
@@ -1000,7 +1049,7 @@ main { position: relative; z-index: 10; }
   padding: 6px 2px;
   border-radius: 12px;
   font-size: 10.5px;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 .tabbar__link[aria-current="page"] { color: var(--ink); }
@@ -1017,9 +1066,8 @@ main { position: relative; z-index: 10; }
 
 @media (min-width: 640px) {
   .hero__cta { flex-direction: row; }
-  .pkgs { grid-template-columns: 1fr 1fr; align-items: start; }
-  /* staggered masonry feel: the right column is pushed down */
-  .pkgs > .pkg:nth-child(even) { margin-top: 32px; }
+  /* stretch, so paired cards are the same height and their bands line up */
+  .pkgs { grid-template-columns: 1fr 1fr; align-items: stretch; }
   .hero__status { font-size: 12px; }
   .hero__sub { font-size: 16px; }
   .stat-grid { grid-template-columns: 1fr 1fr; }
@@ -1041,6 +1089,10 @@ main { position: relative; z-index: 10; }
     scroll-behavior: auto !important;
   }
   [data-reveal] { opacity: 1; transform: none; }
+  /* The lifecycle strip is scrubbed by scroll, and that scrubbing is what
+     normally raises these from 0.25. With motion off the script never runs,
+     so without this the six steps stay permanently faint. */
+  .lifecycle__step { opacity: 1; transform: none; }
 }
 
 /* ==========================================================================
@@ -1058,19 +1110,19 @@ main { position: relative; z-index: 10; }
   flex: none;
   border-radius: 6px;
   font-size: 10px;
-  background: oklch(92% 0.06 265);
-  color: oklch(40% 0.14 265);
+  background: oklch(24% 0.004 286);
+  color: oklch(74% 0.008 286);
 }
 
 .world__pip {
   width: 6px; height: 6px;
   flex: none;
   border-radius: 50%;
-  background: oklch(72% 0.14 293);
+  background: var(--brand-dim);
 }
 
-.world__pip--two   { background: oklch(72% 0.14 240); }
-.world__pip--three { background: oklch(72% 0.14 150); }
+.world__pip--two   { background: oklch(76% 0.008 286); }
+.world__pip--three { background: var(--brand); }
 
 /* ------------------------------------------------------------- notice -- */
 
@@ -1086,8 +1138,8 @@ main { position: relative; z-index: 10; }
   border-radius: 16px;
   font-size: 13.5px;
   line-height: 1.6;
-  color: oklch(13% 0.012 285 / 0.6);
-  background: oklch(100% 0 0 / 0.4);
+  color: var(--ink-60);
+  background: oklch(100% 0 0 / 0.07);
 }
 
 .notice__tag {
@@ -1099,7 +1151,7 @@ main { position: relative; z-index: 10; }
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--violet);
-  background: oklch(95% 0.03 293);
+  background: var(--brand-tint);
 }
 
 .creator .stats { margin-top: 20px; }
@@ -1116,8 +1168,8 @@ main { position: relative; z-index: 10; }
   border-radius: 999px;
   font-size: 11.5px;
   font-weight: 500;
-  color: oklch(45% 0.13 155);
-  background: oklch(94% 0.05 155);
+  color: var(--brand-dim);
+  background: oklch(22% 0.04 109.2);
 }
 
 /* -------------------------------------------------------------- panel -- */
@@ -1127,15 +1179,15 @@ main { position: relative; z-index: 10; }
   padding: 26px;
   border: 1px solid var(--hairline);
   border-radius: 24px;
-  background: oklch(100% 0 0 / 0.62);
+  background: oklch(19.2% 0.004 286 / 0.62);
   box-shadow: var(--shadow-soft);
 }
 
-.panel--quiet { background: oklch(100% 0 0 / 0.38); box-shadow: none; }
+.panel--quiet { background: oklch(100% 0 0 / 0.06); box-shadow: none; }
 
 /* A step that cannot be started yet. Reads as inactive, not as broken. */
-.panel--locked { background: oklch(100% 0 0 / 0.3); box-shadow: none; }
-.panel--locked .panel__title { color: oklch(13% 0.012 285 / 0.6); }
+.panel--locked { background: oklch(100% 0 0 / 0.05); box-shadow: none; }
+.panel--locked .panel__title { color: var(--ink-60); }
 
 .panel__head {
   display: flex;
@@ -1155,7 +1207,7 @@ main { position: relative; z-index: 10; }
   max-width: 62ch;
   font-size: 14px;
   line-height: 1.65;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 .panel__note {
@@ -1163,7 +1215,7 @@ main { position: relative; z-index: 10; }
   margin-top: 14px;
   font-size: 12.5px;
   line-height: 1.6;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 .panel__foot {
@@ -1174,7 +1226,7 @@ main { position: relative; z-index: 10; }
   margin-top: 20px;
 }
 
-.panel__hint { font-size: 12.5px; color: oklch(13% 0.012 285 / 0.6); }
+.panel__hint { font-size: 12.5px; color: var(--ink-60); }
 
 .status-chip {
   flex: none;
@@ -1182,7 +1234,7 @@ main { position: relative; z-index: 10; }
   border-radius: 999px;
   font-family: var(--mono);
   font-size: 11px;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
   background: var(--muted);
 }
 
@@ -1213,10 +1265,10 @@ main { position: relative; z-index: 10; }
   margin-top: 6px;
   font-family: var(--mono);
   font-size: 13px;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
-.profile__line { margin-top: 10px; font-size: 15px; color: oklch(13% 0.012 285 / 0.6); }
+.profile__line { margin-top: 10px; font-size: 15px; color: var(--ink-60); }
 
 .profile__actions { display: flex; flex-wrap: wrap; gap: 10px; }
 
@@ -1239,10 +1291,10 @@ main { position: relative; z-index: 10; }
   padding: 12px 16px;
   border: 1px solid var(--hairline);
   border-radius: 14px;
-  background: oklch(100% 0 0 / 0.5);
+  background: oklch(19.2% 0.004 286 / 0.5);
 }
 
-.tier__dot { width: 7px; height: 7px; flex: none; border-radius: 50%; background: oklch(72% 0.14 293); }
+.tier__dot { width: 7px; height: 7px; flex: none; border-radius: 50%; background: var(--brand-dim); }
 .tier__name { font-size: 14px; }
 
 /* ------------------------------------------------------------ helpers -- */
@@ -1257,7 +1309,7 @@ main { position: relative; z-index: 10; }
   margin-top: 22px;
   font-size: 12px;
   line-height: 1.6;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }/* -------------------------------------------- conversion breakpoints --- */
 
 @media (min-width: 640px) {
@@ -1293,7 +1345,7 @@ main { position: relative; z-index: 10; }
   flex-basis: 100%;
   margin-top: 2px;
   font-size: 12.5px;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 .searchbar__state {
@@ -1303,7 +1355,7 @@ main { position: relative; z-index: 10; }
   margin-top: 16px;
   font-family: var(--mono);
   font-size: 11.5px;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 /* --------------------------------------------------- avatars that load --- */
@@ -1329,7 +1381,7 @@ main { position: relative; z-index: 10; }
   border: 1px solid var(--hairline);
   border-radius: 20px;
   overflow: hidden;
-  background: oklch(100% 0 0 / 0.55);
+  background: oklch(19.2% 0.004 286 / 0.55);
 }
 
 .vrow {
@@ -1344,11 +1396,11 @@ main { position: relative; z-index: 10; }
 .vrow:first-child { border-top: 0; }
 
 .vrow--head {
-  background: oklch(100% 0 0 / 0.5);
+  background: oklch(19.2% 0.004 286 / 0.5);
   font-size: 11px;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 .vrow__v {
@@ -1363,18 +1415,18 @@ main { position: relative; z-index: 10; }
   margin-left: 8px;
   padding: 2px 7px;
   border-radius: 999px;
-  background: oklch(96% 0.03 293);
+  background: var(--brand-tint);
   font-family: var(--sans);
   font-size: 10.5px;
-  color: oklch(45% 0.08 293);
+  color: oklch(72% 0.1 109.2);
 }
 
-.vrow__tag--muted { background: var(--muted); color: oklch(13% 0.012 285 / 0.6); }
+.vrow__tag--muted { background: var(--muted); color: var(--ink-60); }
 
 .vrow__when {
   font-size: 12.5px;
   font-variant-numeric: tabular-nums;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
   text-align: right;
 }
 
@@ -1382,7 +1434,7 @@ main { position: relative; z-index: 10; }
   grid-column: 1 / -1;
   font-family: var(--mono);
   font-size: 10.5px;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1404,7 +1456,7 @@ main { position: relative; z-index: 10; }
   padding: 6px 12px 6px 6px;
   border: 1px solid var(--hairline);
   border-radius: 999px;
-  background: oklch(100% 0 0 / 0.6);
+  background: oklch(19.2% 0.004 286 / 0.6);
   font-size: 13px;
   transition: transform 0.2s var(--ease), box-shadow 0.2s var(--ease);
 }
@@ -1414,7 +1466,7 @@ main { position: relative; z-index: 10; }
 .contrib__n {
   font-family: var(--mono);
   font-size: 11px;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 /* --------------------------------------------------------- the evidence -- */
@@ -1431,7 +1483,7 @@ main { position: relative; z-index: 10; }
   padding: 14px 16px;
   border: 1px solid var(--hairline);
   border-radius: 16px;
-  background: oklch(100% 0 0 / 0.5);
+  background: oklch(19.2% 0.004 286 / 0.5);
 }
 
 .ev__mark {
@@ -1441,10 +1493,10 @@ main { position: relative; z-index: 10; }
   margin-top: 1px;
   border-radius: 50%;
   background: var(--muted);
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
-.ev--pass .ev__mark { background: oklch(94% 0.08 150); color: oklch(45% 0.15 150); }
+.ev--pass .ev__mark { background: oklch(24% 0.05 109.2); color: var(--brand-dim); }
 
 .ev__label {
   display: flex;
@@ -1465,24 +1517,24 @@ main { position: relative; z-index: 10; }
   text-transform: uppercase;
   font-weight: 400;
   background: var(--muted);
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
-.ev__flag--enough { background: oklch(94% 0.08 150); color: oklch(42% 0.14 150); }
-.ev__flag--signal { background: oklch(96% 0.05 70); color: oklch(48% 0.12 65); }
+.ev__flag--enough { background: oklch(24% 0.05 109.2); color: var(--brand-dim); }
+.ev__flag--signal { background: oklch(23% 0.004 286); color: oklch(74% 0.008 286); }
 
 .ev__detail {
   margin-top: 5px;
   font-size: 13px;
   line-height: 1.55;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 /* ------------------------------------------------- status chip variants -- */
 
-.status-chip--ok { background: oklch(94% 0.08 150); color: oklch(42% 0.14 150); }
-.status-chip--part { background: oklch(96% 0.05 70); color: oklch(48% 0.12 65); }
-.status-chip--off { background: var(--muted); color: oklch(13% 0.012 285 / 0.6); }
+.status-chip--ok { background: oklch(24% 0.05 109.2); color: var(--brand-dim); }
+.status-chip--part { background: oklch(23% 0.004 286); color: oklch(74% 0.008 286); }
+.status-chip--off { background: var(--muted); color: var(--ink-60); }
 
 /* ------------------------------------------------------- copyable code -- */
 
@@ -1495,7 +1547,7 @@ main { position: relative; z-index: 10; }
   padding: 14px 16px;
   border: 1px solid var(--hairline);
   border-radius: 16px;
-  background: oklch(20% 0.02 285 / 0.035);
+  background: oklch(0% 0 0 / 0.4);
 }
 
 .codeblock__code {
@@ -1515,20 +1567,20 @@ main { position: relative; z-index: 10; }
   place-items: center;
   width: 30px; height: 30px;
   border-radius: 9px;
-  color: oklch(13% 0.012 285 / 0.6);
-  background: oklch(100% 0 0 / 0.7);
+  color: var(--ink-60);
+  background: oklch(21% 0.005 286 / 0.8);
   transition: color 0.18s, background-color 0.18s;
 }
 
-.codeblock__copy:hover { color: var(--ink); background: #fff; }
-.codeblock__copy.is-done { color: oklch(52% 0.15 150); }
+.codeblock__copy:hover { color: var(--brand-ink); background: var(--brand); }
+.codeblock__copy.is-done { color: var(--brand); }
 
 /* ------------------------------------------------------- the sparkline -- */
 
 /* Drawn from real daily download counts. When npm reports none, the element
    is not rendered at all rather than drawn flat. */
 .spark { display: block; width: 100%; height: 58px; overflow: visible; }
-.spark__area { fill: oklch(55% 0.245 293 / 0.1); }
+.spark__area { fill: oklch(95.81% 0.2077 109.2 / 0.12); }
 .spark__line { fill: none; stroke: var(--violet); stroke-width: 1.5; stroke-linejoin: round; }
 
 /* ------------------------------------------------------------ loading --- */
@@ -1537,9 +1589,9 @@ main { position: relative; z-index: 10; }
   border-radius: 14px;
   background: linear-gradient(
     90deg,
-    oklch(20% 0.02 285 / 0.045),
-    oklch(20% 0.02 285 / 0.08),
-    oklch(20% 0.02 285 / 0.045)
+    oklch(0% 0 0 / 0.45),
+    oklch(100% 0 0 / 0.1),
+    oklch(0% 0 0 / 0.45)
   );
   background-size: 200% 100%;
   animation: shimmer 1.5s linear infinite;
@@ -1571,7 +1623,7 @@ main { position: relative; z-index: 10; }
   width: 13px; height: 13px;
   flex: none;
   border-radius: 50%;
-  border: 1.5px solid oklch(20% 0.02 285 / 0.18);
+  border: 1.5px solid oklch(100% 0 0 / 0.16);
   border-top-color: var(--violet);
   animation: spin 0.7s linear infinite;
 }
@@ -1606,8 +1658,8 @@ main { position: relative; z-index: 10; }
 }
 
 .toast.is-in { opacity: 1; transform: translate(-50%, 0); }
-.toast--bad { border-color: oklch(72% 0.16 32 / 0.4); }
-.toast__dot { width: 6px; height: 6px; flex: none; border-radius: 50%; background: oklch(60% 0.2 150); }
+.toast--bad { border-color: oklch(80% 0.006 286 / 0.5); }
+.toast__dot { width: 6px; height: 6px; flex: none; border-radius: 50%; background: var(--brand); }
 .toast--bad .toast__dot { background: var(--coral); }
 
 /* ------------------------------------------------------- package meta --- */
@@ -1632,7 +1684,7 @@ main { position: relative; z-index: 10; }
   gap: 8px 20px;
   margin-top: 16px;
   font-size: 13px;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 .meta-row span { display: inline-flex; align-items: center; gap: 6px; }
@@ -1645,7 +1697,7 @@ main { position: relative; z-index: 10; }
   border: 1px solid var(--hairline);
   border-radius: 24px;
   overflow: hidden;
-  background: oklch(100% 0 0 / 0.55);
+  background: oklch(19.2% 0.004 286 / 0.55);
 }
 
 .feed__row {
@@ -1664,7 +1716,7 @@ main { position: relative; z-index: 10; }
   font-size: 10px;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
 }
 
 .feed__what { font-size: 13.5px; line-height: 1.5; min-width: 0; }
@@ -1673,7 +1725,7 @@ main { position: relative; z-index: 10; }
 .feed__when {
   font-size: 12px;
   font-variant-numeric: tabular-nums;
-  color: oklch(13% 0.012 285 / 0.6);
+  color: var(--ink-60);
   white-space: nowrap;
 }
 
@@ -1688,13 +1740,13 @@ main { position: relative; z-index: 10; }
   width: 22px; height: 22px;
   margin-right: 10px;
   border-radius: 7px;
-  background: oklch(96% 0.03 293);
+  background: var(--brand-tint);
   font-family: var(--mono);
   font-size: 11px;
   color: var(--violet);
 }
 
-.panel--done .panel__step { background: oklch(94% 0.08 150); color: oklch(42% 0.14 150); }/* ------------------------------------------------- packages breakpoints -- */
+.panel--done .panel__step { background: oklch(24% 0.05 109.2); color: var(--brand-dim); }/* ------------------------------------------------- packages breakpoints -- */
 
 @media (max-width: 560px) {
   /* The source column is the first thing to go: the row still reads without
@@ -1887,8 +1939,10 @@ main { position: relative; z-index: 10; }
   z-index: 100;
   padding: 11px 20px;
   border-radius: 9999px;
-  background: var(--ink);
-  color: #fff;
+  /* The accent, not the ink: --ink is off-white on the dark theme, so white
+     text on it would be invisible the moment the link took focus. */
+  background: var(--brand);
+  color: var(--brand-ink);
   font-size: 13px;
   font-weight: 500;
   box-shadow: var(--shadow-lift);
@@ -1921,12 +1975,12 @@ main { scroll-margin-top: 120px; }
    red, because a deprecated package is still a real package. */
 .notice--warn {
   border-style: solid;
-  border-color: oklch(80% 0.1 70);
-  background: oklch(98% 0.03 75);
+  border-color: oklch(78% 0.008 286);
+  background: oklch(22% 0.004 286);
 }
 
-.notice__tag--warn { color: oklch(48% 0.12 65); background: oklch(94% 0.07 75); }
-.vrow__tag--warn { background: oklch(94% 0.07 75); color: oklch(48% 0.12 65); }
+.notice__tag--warn { color: oklch(74% 0.008 286); background: oklch(24% 0.004 286); }
+.vrow__tag--warn { background: oklch(24% 0.004 286); color: oklch(74% 0.008 286); }
 
 /* ---------------------------------------------------------- badge set --- */
 
@@ -1946,7 +2000,7 @@ main { scroll-margin-top: 120px; }
   padding: 6px 13px 6px 11px;
   border: 1px solid var(--hairline);
   border-radius: 9999px;
-  background: oklch(100% 0 0 / 0.6);
+  background: oklch(19.2% 0.004 286 / 0.6);
   font-size: 12.5px;
   letter-spacing: -0.005em;
   /* The title attribute carries the explanation, so the cursor says so. */
@@ -1955,17 +2009,17 @@ main { scroll-margin-top: 120px; }
 
 .badge__dot { width: 6px; height: 6px; flex: none; border-radius: 50%; }
 
-.badge--ok { background: oklch(96% 0.05 150); border-color: oklch(86% 0.08 150); color: oklch(38% 0.13 150); }
-.badge--ok .badge__dot { background: oklch(58% 0.16 150); }
+.badge--ok { background: oklch(22% 0.04 109.2); border-color: var(--brand-tint); color: var(--brand-dim); }
+.badge--ok .badge__dot { background: var(--brand); }
 
-.badge--info { background: oklch(96% 0.04 270); border-color: oklch(88% 0.06 280); color: oklch(42% 0.13 285); }
+.badge--info { background: oklch(22% 0.004 286); border-color: oklch(25% 0.004 286); color: var(--brand-dim); }
 .badge--info .badge__dot { background: var(--violet); }
 
-.badge--muted { color: oklch(13% 0.012 285 / 0.6); }
-.badge--muted .badge__dot { background: oklch(13% 0.012 285 / 0.35); }
+.badge--muted { color: var(--ink-60); }
+.badge--muted .badge__dot { background: var(--ink-35); }
 
-.badge--off { background: var(--muted); color: oklch(13% 0.012 285 / 0.6); }
-.badge--off .badge__dot { background: oklch(13% 0.012 285 / 0.3); }
+.badge--off { background: var(--muted); color: var(--ink-60); }
+.badge--off .badge__dot { background: var(--ink-30); }
 
 /* ==========================================================================
    Motion ownership
@@ -2043,7 +2097,7 @@ html.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
 }
 
 .seam svg { display: block; width: 100%; height: 100%; }
-.seam path { fill: oklch(100% 0 0 / 0.55); }
+.seam path { fill: oklch(19.2% 0.004 286 / 0.55); }
 
 /* ---------------------------------------------- reduced motion, again -- */
 
@@ -2069,3 +2123,33 @@ html.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
    container. clip, not hidden, so this never becomes a scroll container and
    never breaks a sticky descendant. */
 .pkgs { overflow-x: clip; }
+
+/* ------------------------------------------------------------- grain --- */
+
+/* A single fixed overlay, borrowed from the reference artwork's halftone.
+   Deliberately restrained: it reads as texture on the dark surfaces and
+   disappears entirely behind text.
+
+   On html rather than body, because body carries overflow-x: clip and a
+   clipped box clips its fixed descendants. z-index sits below the nav (100)
+   and the toasts (80), so nothing interactive is ever covered, and
+   pointer-events: none means it cannot take a click in any case.
+
+   It is one element with no scroll listener and no animation, so it adds
+   nothing to the scroll path. */
+html::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.055;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 160px 160px;
+}
+
+/* The texture is decoration. Anyone who has asked for less motion and less
+   visual noise should not be given it. */
+@media (prefers-reduced-motion: reduce) {
+  html::after { display: none; }
+}
