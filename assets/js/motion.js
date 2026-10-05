@@ -117,10 +117,42 @@
      Only ever applied to the elements asked for, never to every heading: the
      effect means "this is the thing to read first", and applying it
      everywhere means it says nothing. */
+  /* A heading marks its lines either with spans or with a <br>. The <br> has
+     to become a line element before anything is read, because textContent
+     yields no whitespace at a break: the words either side of it fuse into
+     one ("how a package<br>gets an identity" reads as "packagegets"), and
+     rebuilding the element from that text drops the break as well.
+
+     Splitting at the <br> fixes both at once. The break is re-inserted
+     between the lines, so the heading still sets exactly as it was written. */
+  function lineElements(el) {
+    const spans = Array.from(el.children).filter((c) => c.tagName === "SPAN");
+    if (spans.length) return spans;
+    if (!el.querySelector("br")) return [el];
+
+    const groups = [[]];
+    for (const node of Array.from(el.childNodes)) {
+      if (node.nodeName === "BR") groups.push([]);
+      else groups[groups.length - 1].push(node);
+    }
+
+    // The nodes are moved into the new line elements, not copied, so any
+    // inline markup inside a line survives intact.
+    el.textContent = "";
+    const made = [];
+    groups.forEach((nodes, i) => {
+      const line = document.createElement("span");
+      nodes.forEach((node) => line.appendChild(node));
+      el.appendChild(line);
+      if (i < groups.length - 1) el.appendChild(document.createElement("br"));
+      made.push(line);
+    });
+    return made;
+  }
+
   function splitWords(el) {
     if (!el || el.dataset.split === "done") return [];
-    const lines = Array.from(el.children).filter((c) => c.tagName === "SPAN");
-    const targets = lines.length ? lines : [el];
+    const targets = lineElements(el);
     const inners = [];
 
     for (const line of targets) {

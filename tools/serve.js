@@ -210,6 +210,21 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, "127.0.0.1", () => {
-  console.log(`packages site running at http://127.0.0.1:${PORT}/`);
+/* Development binds to loopback, so a dev server is never reachable from the
+   network. Production has to bind every interface or the platform's proxy
+   cannot reach the container at all: it connects over the internal network,
+   and a process listening on 127.0.0.1 refuses that connection.
+
+   This changes who may open a connection, not what is served. The realpath
+   containment, the dot-file rule, the site allowlist and the extension check
+   above are what keep the backend source and the env files private. They are
+   unchanged, and they run for every request whatever interface it arrived
+   on. */
+const HOST =
+  process.env.HOST ||
+  (process.env.NODE_ENV === "production" ? "0.0.0.0" : "127.0.0.1");
+
+server.listen(PORT, HOST, () => {
+  const where = HOST === "0.0.0.0" ? `0.0.0.0:${PORT}` : `http://${HOST}:${PORT}/`;
+  console.log(`packages site running at ${where}`);
 });
