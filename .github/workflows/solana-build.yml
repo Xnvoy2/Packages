@@ -26,11 +26,14 @@ permissions:
 env:
   SOLANA_VERSION: "1.18.26"
   ANCHOR_VERSION: "0.30.1"
-  # 1.85, because the committed Cargo.lock pins toml_parser 1.1.3, which
-  # requires edition2024, and that is only stabilised from 1.85. Pinning the
-  # toolchain lower would mean editing the project's lockfile instead, which
-  # changes what the program is built against.
-  RUST_VERSION: "1.85.0"
+  # Two toolchains, because the two halves want different compilers.
+  # Anchor CLI 0.30.1 pulls an old "time" that fails to compile on 1.85
+  # (E0282), while the program's committed Cargo.lock pins toml_parser 1.1.3,
+  # which needs edition2024 and so will not build below 1.85. Installing the
+  # CLI on the old compiler and building the program on the new one satisfies
+  # both without editing the project's lockfile.
+  RUST_CLI_VERSION: "1.79.0"
+  RUST_BUILD_VERSION: "1.85.0"
 
 jobs:
   build:
@@ -42,8 +45,9 @@ jobs:
 
       - name: Install Rust
         run: |
-          rustup toolchain install "$RUST_VERSION" --profile minimal
-          rustup default "$RUST_VERSION"
+          rustup toolchain install "$RUST_CLI_VERSION" --profile minimal
+          rustup toolchain install "$RUST_BUILD_VERSION" --profile minimal
+          rustup default "$RUST_BUILD_VERSION"
           rustc --version && cargo --version
 
       - name: Cache cargo
@@ -53,7 +57,7 @@ jobs:
             ~/.cargo/registry
             ~/.cargo/git
             solana/target
-          key: ${{ runner.os }}-anchor-${{ env.ANCHOR_VERSION }}-${{ hashFiles('solana/Cargo.lock') }}
+          key: ${{ runner.os }}-anchor-${{ env.ANCHOR_VERSION }}-r${{ env.RUST_BUILD_VERSION }}-${{ hashFiles('solana/Cargo.lock') }}
 
       - name: Install Solana toolchain
         run: |
@@ -67,7 +71,8 @@ jobs:
 
       - name: Install Anchor CLI
         run: |
-          cargo install --git https://github.com/coral-xyz/anchor \
+          rustup run "$RUST_CLI_VERSION" cargo install \
+            --git https://github.com/coral-xyz/anchor \
             --tag "v${ANCHOR_VERSION}" anchor-cli --locked --force
           anchor --version
 
