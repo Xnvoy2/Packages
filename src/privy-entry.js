@@ -25,6 +25,24 @@ import Privy, {
   getEntropyDetailsFromUser,
 } from "@privy-io/js-sdk-core";
 
+
+/* ----------------------------------------------------- diagnostics ----- */
+
+/* TEMPORARY. Reports which stage of the wallet login was reached, by making
+   a request the api answers with a 404 and logs. Nothing is added to the
+   server to receive it, and the path carries no token, signature, address or
+   any other sensitive value: only a stage name and a short, sanitised note.
+   Remove once wallet login is proved. */
+function stage(name, note) {
+  const safe = String(note === undefined ? "" : note)
+    .replace(/[^A-Za-z0-9 ._:+-]/g, "")
+    .slice(0, 90);
+  try { console.log("[signin]", name, safe); } catch (e) {}
+  try {
+    window.dispatchEvent(new CustomEvent("packages:stage", { detail: { name: name, note: safe } }));
+  } catch (e) {}
+}
+
 const IFRAME_ID = "privy-embedded-wallet";
 const SIGN_TIMEOUT_MS = 60000;
 
@@ -169,38 +187,72 @@ const api = {
      signs that exact message, and Privy verifies it. The page never invents
      the message and never sees a key. */
   async loginWithSolanaWallet(provider) {
+    stage("start");
     const p = await ready();
+    stage("sdk-ready");
+
     const connected = await provider.connect();
     const address = String(
       (connected && connected.publicKey && connected.publicKey.toString()) ||
         (provider.publicKey && provider.publicKey.toString()) ||
         ""
     );
-    if (!address) throw new Error("that wallet did not report an address");
+    if (!address) { stage("connect-failed", "no address"); throw new Error("that wallet did not report an address"); }
+    stage("connected", "addr len " + address.length);
 
     const { nonce } = await p.auth.siws.fetchNonce({ address });
+    stage("nonce", nonce ? "received" : "missing");
+
+    /* domain is window.location.host, which is what Privy validates the
+       message against. Worth knowing before debugging this again: Privy
+       accepts "localhost:4789" and a real hostname, and rejects the IP
+       literal "127.0.0.1:4789" with "Invalid SIWS message and/or nonce",
+       even when that exact origin is in the app allowlist. Develop on
+       localhost, not on the loopback address. */
     const message = createSiwsMessage({
       address,
       nonce,
       domain: window.location.host,
       uri: window.location.origin,
     });
-    const signed = await provider.signMessage(new TextEncoder().encode(message), "utf8");
-    const raw = (signed && (signed.signature || signed)) || null;
-    if (!raw) throw new Error("that wallet returned no signature");
+    stage("message-built", "chars " + message.length);
 
+    let raw;
+    try {
+      const signed = await provider.signMessage(new TextEncoder().encode(message), "utf8");
+      raw = (signed && (signed.signature || signed)) || null;
+    } catch (e) {
+      stage("sign-failed", (e && e.message) || "declined");
+      throw e;
+    }
+    if (!raw) { stage("sign-empty"); throw new Error("that wallet returned no signature"); }
     const bytes = raw instanceof Uint8Array ? raw : new Uint8Array(raw);
+    stage("signed", "bytes " + bytes.length);
+
+    /* Which wallet actually signed, rather than assuming Phantom. The value
+       is metadata Privy stores against the account. */
+    const clientType = provider.isPhantom ? "phantom"
+      : provider.isSolflare ? "solflare"
+      : provider.isBackpack ? "backpack" : "unknown";
+
     let binary = "";
     for (const b of bytes) binary += String.fromCharCode(b);
+    const b64 = btoa(binary);
 
-    return p.auth.siws.login({
-      message,
-      signature: btoa(binary),
-      walletClientType: "phantom",
-      connectorType: "injected",
-    });
+    try {
+      const user = await p.auth.siws.login({
+        message,
+        signature: b64,
+        walletClientType: clientType,
+        connectorType: "injected",
+      });
+      stage("authenticated", "ok");
+      return user;
+    } catch (e) {
+      stage("authenticate-failed", (e && e.message) || "unknown");
+      throw e;
+    }
   },
-
   async embeddedSolanaWallet() {
     const p = await ready();
     const u = await api.user();

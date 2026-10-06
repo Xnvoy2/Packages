@@ -16,7 +16,7 @@
 process.env.PACKAGES_DEV_DB = process.env.DATABASE_URL ? "" : "memory";
 process.env.PACKAGES_SESSION_SECRET =
   process.env.PACKAGES_SESSION_SECRET || "test-secret-not-for-production";
-process.env.PACKAGES_PROGRAM_ID = "PkgAcoAFUaVhzP4Ux5GFeMDGsZFNNRvcRnEFmjbVeEa";
+process.env.PACKAGES_PROGRAM_ID = "HbA6Kn3SsXbs1KyM8qJHHWQjXLuAGoPXW7upsNp9k8aP";
 
 const test = require("node:test");
 const assert = require("node:assert/strict");

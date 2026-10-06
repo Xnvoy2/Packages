@@ -639,7 +639,7 @@ test("reconciliation refuses to confirm without a deployed program", async () =>
 });
 
 test("reconciliation treats an unknown signature as not found, never as success", async () => {
-  process.env.PACKAGES_PROGRAM_ID = "PkgAcoAFUaVhzP4Ux5GFeMDGsZFNNRvcRnEFmjbVeEa";
+  process.env.PACKAGES_PROGRAM_ID = "HbA6Kn3SsXbs1KyM8qJHHWQjXLuAGoPXW7upsNp9k8aP";
   // The config was read at load time, so reach the pure logic directly.
   const chain = require("../_lib/chain");
   const original = chain.transactionState;

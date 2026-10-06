@@ -9,3 +9,7 @@ solana/target/
 .DS_Store
 sitemap.xml
 dist/
+
+# A program deployment keypair must never be committed.
+*keypair*.json
+solana/target/

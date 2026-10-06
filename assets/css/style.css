@@ -2154,77 +2154,183 @@ html::after {
   html::after { display: none; }
 }
 
+
 /* ------------------------------------------------------------ sign in --- */
 
-/* Built from the same tokens as everything else, so it inherits the theme
-   rather than carrying a palette of its own. */
+/* One Packages component, built from the existing tokens and the existing
+   button and field classes. Nothing here introduces a colour: the accent is
+   --brand, the surfaces are --card and --background, the text is --ink. */
+
 .signin {
   position: fixed;
   inset: 0;
-  z-index: 120;
+  z-index: 140;
   display: grid;
   place-items: center;
-  padding: 20px;
+  padding: 24px 16px;
 }
 
-.signin__scrim {
-  position: absolute;
-  inset: 0;
-  background: oklch(8% 0.002 286 / 0.72);
-}
+.signin__scrim { position: absolute; inset: 0; background: oklch(6% 0.002 286 / 0.78); }
 
 .signin__panel {
   position: relative;
-  width: min(420px, 100%);
-  padding: 28px;
+  width: min(400px, 100%);
+  /* One padding value drives the grid: every child aligns to this left edge. */
+  padding: 26px;
   background: var(--card);
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: 18px;
   box-shadow: var(--shadow-lift);
+  /* Long errors wrap instead of widening the panel. */
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
-.signin__close { position: absolute; top: 14px; right: 14px; }
-.signin__title { font-size: 24px; letter-spacing: -0.02em; margin-top: 6px; }
-.signin__copy { margin-top: 10px; color: var(--ink-78); font-size: 14.5px; line-height: 1.55; }
-.signin__label { display: block; font-size: 12px; color: var(--ink-60); margin-bottom: 6px; }
-.signin__hint { min-height: 18px; margin-top: 4px; font-size: 13px; color: var(--ink-60); }
+/* Quiet, square, and tucked into the corner rather than floating as a pill. */
+.signin__close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: var(--ink-60);
+  cursor: pointer;
+  transition: color 0.16s var(--ease), background 0.16s var(--ease);
+}
 
-.signin__form {
+.signin__close:hover { color: var(--ink); background: oklch(100% 0 0 / 0.07); }
+
+.signin__head { padding-right: 34px; }
+
+.signin__eyebrow {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  color: var(--brand);
+}
+
+.signin__title {
+  margin-top: 8px;
+  font-size: 21px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.signin__copy {
+  margin-top: 10px;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--ink-60);
+}
+
+.signin__copy--tight { margin-top: 0; }
+
+/* The one vertical rhythm between the head and whatever step is showing. */
+.signin__body { margin-top: 22px; }
+
+.signin__form { display: flex; flex-direction: column; gap: 10px; }
+.signin__label { font-size: 12px; color: var(--ink-60); }
+.signin__submit { width: 100%; }
+
+/* The status row belongs to the action above it, so it sits tight against it
+   and holds its height whether or not it has anything to say. */
+.signin__status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 17px;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: var(--ink-60);
+}
+
+.signin__alt {
+  width: 100%;
+  margin-top: 12px;
+  justify-content: center;
+}
+
+/* --------------------------------------------------------- the states --- */
+
+/* Loading, success and failure share one block, so the panel does not jump
+   as it moves between them. */
+.signin__state {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
+  align-items: flex-start;
+  min-height: 132px;
+  padding-top: 4px;
 }
 
-.signin__alt { margin-top: 14px; }
+.signin__state-title { margin-top: 16px; font-size: 16px; letter-spacing: -0.01em; }
+.signin__state-copy { margin-top: 6px; font-size: 13.5px; line-height: 1.6; color: var(--ink-60); }
+.signin__state-copy--error { color: var(--ink-78); }
 
-/* The page behind must not scroll while the dialog is open. Lenis is driving
-   that scroll, so stopping the wheel is not enough on its own; the class is
-   also what Lenis's own stopped state keys off. */
-html.signin-open { overflow: hidden; }
+.signin__actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
 
-/* The X link sits with the nav's quiet controls: an icon the colour of
-   secondary text, lifting to the accent on hover like every other link. */
-.nav__x {
+/* Three marks that rise in turn. No glow, no gradient: the accent and a
+   neutral, at the same weight as the rest of the interface. */
+.signin__loader { display: flex; align-items: flex-end; gap: 5px; height: 18px; }
+
+.signin__loader span {
+  width: 5px;
+  height: 16px;
+  border-radius: 2px;
+  background: var(--ink-30);
+  animation: signin-pulse 1.1s var(--ease) infinite;
+}
+
+.signin__loader span:nth-child(2) { animation-delay: 0.14s; }
+.signin__loader span:nth-child(3) { animation-delay: 0.28s; }
+
+@keyframes signin-pulse {
+  0%, 100% { background: var(--ink-30); transform: scaleY(0.55); }
+  40%      { background: var(--brand);  transform: scaleY(1); }
+}
+
+.signin__tick {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   width: 30px;
   height: 30px;
-  flex: none;
-  border-radius: 9999px;
-  color: var(--ink-60);
-  /* A little air before the filled call to action, which otherwise sits
-     almost flush against the icon. */
-  margin-right: 6px;
-  transition: color 0.18s var(--ease), background 0.18s var(--ease);
+  border-radius: 50%;
+  background: var(--brand);
+  color: var(--brand-ink);
 }
 
-.nav__x:hover { color: var(--brand); background: oklch(100% 0 0 / 0.06); }
-.nav__x svg { display: block; }
+@media (prefers-reduced-motion: reduce) {
+  .signin__loader span { animation: none; transform: none; background: var(--brand); }
+}
 
-/* The narrow nav already hides its secondary links; the icon goes with them
-   rather than crowding the one call to action. */
-@media (max-width: 639px) {
-  .nav__x { display: none; }
+/* The page behind must not scroll while the dialog is open. */
+html.signin-open { overflow: hidden; }
+
+@media (max-width: 420px) {
+  .signin { padding: 16px; }
+  .signin__panel { padding: 20px; border-radius: 16px; }
+  .signin__title { font-size: 19px; }
+}
+
+/* Developer instrumentation, shown only behind the debug flag and removed
+   before production. Deliberately plain so it never reads as product. */
+.signin__trace {
+  margin-top: 18px;
+  padding: 8px 10px;
+  max-height: 150px;
+  overflow-y: auto;
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  background: var(--background);
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.65;
+  color: var(--ink-60);
 }

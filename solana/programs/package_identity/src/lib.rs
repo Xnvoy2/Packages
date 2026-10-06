@@ -31,7 +31,7 @@
 use anchor_lang::prelude::*;
 use anchor_lang::solana_program::hash::hash;
 
-declare_id!("PkgAcoAFUaVhzP4Ux5GFeMDGsZFNNRvcRnEFmjbVeEa");
+declare_id!("HbA6Kn3SsXbs1KyM8qJHHWQjXLuAGoPXW7upsNp9k8aP");
 
 /// Seed prefixes.
 ///

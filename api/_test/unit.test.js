@@ -379,7 +379,7 @@ test("identity derivation matches the program's hash exactly", () => {
 });
 
 test("release records are addressed per version, under their identity", () => {
-  process.env.PACKAGES_PROGRAM_ID = "PkgAcoAFUaVhzP4Ux5GFeMDGsZFNNRvcRnEFmjbVeEa";
+  process.env.PACKAGES_PROGRAM_ID = "HbA6Kn3SsXbs1KyM8qJHHWQjXLuAGoPXW7upsNp9k8aP";
   // The module read the id at load time, so this exercises the seed shape
   // rather than the address, which is what the program constrains.
   const a = solana.releaseSeeds(
