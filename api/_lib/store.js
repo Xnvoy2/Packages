@@ -578,6 +578,24 @@ async function repositoryFor(packageName) {
     [pkg.repo_owner + "/" + pkg.repo_name]);
 }
 
+/* The coin, written once. The where-clause is the guard: a second launch
+   cannot overwrite the first, whatever the caller does. */
+async function recordCoin(packageName, coin) {
+  await db.query(
+    `update packages
+        set coin_mint = $2, coin_tx = $3, coin_creator = $4,
+            coin_launched_at = coalesce(coin_launched_at, now())
+      where name = $1 and coin_mint is null`,
+    [packageName, coin.mint, coin.signature, coin.creator]
+  );
+  await recordEvent("coin.launched", {
+    packageName,
+    payload: { mint: coin.mint, signature: coin.signature, creator: coin.creator },
+  });
+  return db.one("select coin_mint, coin_tx, coin_creator from packages where name = $1", [packageName]);
+}
+
+module.exports.recordCoin = recordCoin;
 module.exports.repositoryFor = repositoryFor;
 module.exports.recordRegistrationAttempt = recordRegistrationAttempt;
 module.exports.latestRegistration = latestRegistration;

@@ -103,6 +103,13 @@
 
     /* Exchange a verified Privy token for the session cookie the rest of
        the api uses. */
+    /* The coin. prepare returns an unsigned transaction for the publisher
+       wallet to sign; confirm reports what was sent, and the server checks
+       the cluster before believing it. */
+    prepareCoin: (name) => post("/api/identity/coin/prepare", { name }),
+    confirmCoin: (name, signature, mint) =>
+      post("/api/identity/coin/confirm", { name, signature, mint }),
+
     async signInWithPrivy(token) {
       const r = await post("/api/auth/privy", { token });
       mePromise = null;

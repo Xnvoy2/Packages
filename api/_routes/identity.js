@@ -36,6 +36,7 @@ const chain = require("../_lib/chain");
 const store = require("../_lib/store");
 const db = require("../_lib/db");
 const registrar = require("../_lib/registrar");
+const pump = require("../_lib/pump");
 
 /* The two rules the program accepts, matching VerificationKind in the
    program source. Kept here rather than imported so a change on either side
@@ -393,3 +394,122 @@ async function register(req, res) {
 }
 
 module.exports = { status, forPackage, prepare, submitted, reconcile, register };
+
+/* ------------------------------------------------------------- the coin -- */
+
+/* Launching the package's coin on Pump.
+
+   The publisher's proven wallet is the creator, so this hands back an
+   unsigned transaction for that wallet to sign rather than signing anything
+   here. Packages signs and pays for the identity; the publisher creates and
+   pays for the coin, and receives whatever Pump assigns to a creator.
+
+   The gate is the same one registration uses, unchanged: the package must be
+   imported, the signed-in user must be its verified owner, and a wallet must
+   have been proved. The creator address comes from that proof, never from
+   the request, so a client cannot swap in another wallet after verifying. */
+async function prepareCoin(req, res) {
+  const current = await session.require(req);
+  const body = await readJson(req);
+  const name = validate.packageName(body.name);
+
+  const { row, wallets } = await registrationPreconditions(name, current.user);
+
+  if (row.coin_mint) {
+    return send(req, res, 200, {
+      prepared: false,
+      alreadyLaunched: true,
+      package: name,
+      mint: row.coin_mint,
+      signature: row.coin_tx,
+      creator: row.coin_creator,
+      cluster: config.solana.cluster,
+    });
+  }
+
+  const built = await pump.buildCreateTransaction({
+    packageName: name,
+    creatorWallet: wallets[0].pubkey,
+  });
+
+  await store.audit("coin.prepared", {
+    userId: current.user.id,
+    login: current.user.github_login || current.user.id,
+    subject: name,
+    detail: { mint: built.mint, creator: built.creator },
+  });
+
+  send(req, res, 201, { prepared: true, package: name, ...built });
+}
+
+/* The browser reports what it sent. Nothing is believed: the bonding curve
+   is read from the cluster and checked to be owned by Pump before the
+   package is recorded as launched. */
+async function confirmCoin(req, res) {
+  const current = await session.require(req);
+  const body = await readJson(req);
+  const name = validate.packageName(body.name);
+  const signature = validate.transactionSignature(body.signature);
+  const mint = validate.solanaPubkey(body.mint);
+
+  const { row, wallets } = await registrationPreconditions(name, current.user);
+  if (row.coin_mint) {
+    return send(req, res, 200, {
+      launched: true, alreadyLaunched: true, package: name,
+      mint: row.coin_mint, signature: row.coin_tx, cluster: config.solana.cluster,
+    });
+  }
+
+  const state = await pump.readCoin(mint);
+  if (!state.exists || !state.ownedByPump) {
+    return send(req, res, 409, {
+      launched: false,
+      reason: "not_on_chain",
+      blocker: "no Pump bonding curve exists for that mint, so nothing was launched",
+    });
+  }
+
+  await store.recordCoin(name, {
+    mint,
+    signature,
+    creator: wallets[0].pubkey,
+  });
+
+  send(req, res, 201, {
+    launched: true,
+    package: name,
+    mint,
+    signature,
+    creator: wallets[0].pubkey,
+    bondingCurve: state.bondingCurve,
+    cluster: config.solana.cluster,
+    explorer: `https://explorer.solana.com/address/${mint}?cluster=${config.solana.cluster}`,
+  });
+}
+
+/* The coin's metadata, built from what was already verified so it points
+   back at the package and its Packages page. Public: a token's metadata has
+   to be readable by anyone. */
+async function coinMetadata(req, res, ctx) {
+  const name = validate.packageName(ctx.params.name);
+  const row = await store.getPackage(name);
+  if (!row) throw notFound("unknown package");
+
+  const site = String(config.siteOrigin || "").replace(/\/$/, "");
+  send(req, res, 200, {
+    name: pump.nameFor(name),
+    symbol: pump.symbolFor(name),
+    description:
+      (row.description || `The npm package ${name}.`) +
+      ` Verified on Packages, which links it to its publisher, its source and its release history.`,
+    website: `${site}/p/${encodeURIComponent(name)}`,
+    package: name,
+    registry: `https://www.npmjs.com/package/${name}`,
+    repository: row.repo_url || null,
+    identity: row.identity_pda || null,
+  });
+}
+
+module.exports.prepareCoin = prepareCoin;
+module.exports.confirmCoin = confirmCoin;
+module.exports.coinMetadata = coinMetadata;

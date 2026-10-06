@@ -177,6 +177,7 @@ const foot = () => `
 <script src="/assets/vendor/Flip.min.js"></script>
 <script src="/assets/vendor/lenis.min.js"></script>
 <script src="/assets/vendor/privy.min.js"></script>
+<script src="/assets/vendor/pump.min.js"></script>
 <script src="/assets/js/api.js"></script>
 <script src="/assets/js/ui.js"></script>
 <script src="/assets/js/motion.js"></script>

@@ -46,6 +46,7 @@ const ROUTES = [
   ["GET", "/api/packages/:name/versions", packages.versions, "read"],
   ["GET", "/api/packages/:name/contributors", packages.contributors, "read"],
   ["GET", "/api/packages/:name/identity", identity.forPackage, "read"],
+  ["GET", "/api/packages/:name/coin-metadata", identity.coinMetadata, "read"],
   ["GET", "/api/packages/:name", packages.detail, "read"],
 
   ["GET", "/api/activity", activity.feed, "read"],
@@ -67,6 +68,8 @@ const ROUTES = [
   ["POST", "/api/wallet/confirm", wallet.confirm, "verify"],
   ["POST", "/api/wallet/remove", wallet.remove, "write"],
 
+  ["POST", "/api/identity/coin/prepare", identity.prepareCoin, "write"],
+  ["POST", "/api/identity/coin/confirm", identity.confirmCoin, "verify"],
   ["GET", "/api/identity/status", identity.status, "read"],
   ["POST", "/api/identity/register", identity.register, "write"],
   ["POST", "/api/identity/prepare", identity.prepare, "write"],
