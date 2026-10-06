@@ -3,6 +3,7 @@ name = "package-identity"
 version = "0.1.0"
 description = "Onchain identity for npm packages: who publishes them, and what they released."
 edition = "2021"
+rust-version = "1.84"
 
 [lib]
 crate-type = ["cdylib", "lib"]

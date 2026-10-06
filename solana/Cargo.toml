@@ -1,8 +1,14 @@
 [workspace]
 members = ["programs/*"]
-resolver = "2"
+resolver = "3"
 
 [profile.release]
 overflow-checks = true
 lto = "fat"
 codegen-units = 1
+
+# The SBF compiler that ships with the Solana toolchain is older than the
+# host one. Declaring the floor lets cargo pick dependency versions that
+# compiler can actually build, instead of the newest published.
+[workspace.package]
+rust-version = "1.84"
