@@ -57,6 +57,10 @@ const config = {
     // The identity program's address, once it is deployed to devnet. Empty
     // means "not deployed", which every onchain surface reports honestly.
     programId: pick("PACKAGES_PROGRAM_ID", ""),
+    /* The key this server signs registrations with. A path to a Solana
+       keypair file, or the secret key array itself. Server side only: it is
+       never sent to a browser and never appears in any response. */
+    registrarKey: pick("PACKAGES_REGISTRAR_KEY", ""),
   },
 
   userAgent:

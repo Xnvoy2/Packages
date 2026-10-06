@@ -580,13 +580,22 @@ test("registering an identity refuses rather than pretending", async () => {
     cookie,
     body: { name: IDENTITY_PKG },
   });
+  /* The server signs registrations itself, so what it refuses on depends on
+     what it is missing. No cluster, or no registrar key, are both refusals;
+     neither may be reported as a registration. This environment has no
+     registrar key, so that is the one it reports. */
   assert.equal(r.status, 503);
-  assert.equal(r.json.prepared, false);
-  assert.equal(r.json.reason, "awaiting_deployment");
-  assert.match(r.json.note, /nothing was sent to any cluster/i);
-  // The refusal still shows what is ready, so the review step can be honest.
-  assert.equal(r.json.wouldRegister.package, IDENTITY_PKG);
-  assert.equal(r.json.wouldRegister.authority, "11111111111111111111111111111111");
+  assert.equal(r.json.registered, false);
+  assert.ok(
+    ["no_registrar", "awaiting_deployment"].includes(r.json.reason),
+    `unexpected refusal reason: ${r.json.reason}`
+  );
+  assert.ok(r.json.blocker, "a refusal has to say what is missing");
+  // Nothing was claimed and nothing was recorded.
+  assert.equal(r.json.identityAddress, undefined);
+  assert.equal(r.json.signature, undefined);
+  const after = await store.getPackage(IDENTITY_PKG);
+  assert.equal(after.identity_pda, null, "a refused registration must not mark the package onchain");
 });
 
 test("a signature cannot be recorded without a prepared registration", async () => {

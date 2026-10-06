@@ -568,6 +568,17 @@ async function applyReconciliation(attemptId, packageName, result) {
   return { onchain: true, status };
 }
 
+/* The repository a package declares, as GitHub reported it. The program
+   records the immutable numeric id, not the name, because a repository can be
+   renamed and the id cannot. */
+async function repositoryFor(packageName) {
+  const pkg = await db.one("select repo_owner, repo_name from packages where name = $1", [packageName]);
+  if (!pkg || !pkg.repo_owner || !pkg.repo_name) return null;
+  return db.one("select github_id, full_name from repositories where full_name = $1",
+    [pkg.repo_owner + "/" + pkg.repo_name]);
+}
+
+module.exports.repositoryFor = repositoryFor;
 module.exports.recordRegistrationAttempt = recordRegistrationAttempt;
 module.exports.latestRegistration = latestRegistration;
 module.exports.registrationsFor = registrationsFor;

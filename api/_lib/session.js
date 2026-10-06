@@ -157,7 +157,7 @@ async function read(req) {
 
 async function require_(req) {
   const session = await read(req);
-  if (!session) throw unauthorized("sign in with GitHub first");
+  if (!session) throw unauthorized("sign in first");
   return session;
 }
 

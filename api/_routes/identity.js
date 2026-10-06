@@ -35,6 +35,13 @@ const solana = require("../_lib/solana");
 const chain = require("../_lib/chain");
 const store = require("../_lib/store");
 const db = require("../_lib/db");
+const registrar = require("../_lib/registrar");
+
+/* The two rules the program accepts, matching VerificationKind in the
+   program source. Kept here rather than imported so a change on either side
+   is a visible mismatch rather than a silent one. */
+const VERIFICATION_PUBLISH_PROOF = 1;
+const VERIFICATION_REPO_AND_ATTESTATION = 2;
 
 async function status(req, res) {
   const cluster = await solana.clusterStatus();
@@ -277,10 +284,112 @@ async function reconcile(req, res) {
   });
 }
 
-/* Kept as the single-call path the dashboard uses, which now reports the
-   blocker rather than attempting anything. */
+/* The single call the dashboard makes to put a package onchain.
+
+   The server is the registrar and the payer: it signs the registration with
+   the key the program accepts, pays the fee and the rent, and submits. The
+   user's wallet is recorded as the owner and signs nothing here. It signed
+   earlier, against a nonce this server issued, and that proof is one of the
+   preconditions below.
+
+   None of the verification rules are relaxed to make this work. The package
+   must be imported, the signed-in user must be its verified owner, and a
+   wallet must have been proved. The facts written to the chain all come from
+   what was already stored, never from the request. */
 async function register(req, res) {
-  return prepare(req, res);
+  const current = await session.require(req);
+  const body = await readJson(req);
+  const name = validate.packageName(body.name);
+
+  const { row, wallets, derived, cluster } = await registrationPreconditions(
+    name,
+    current.user
+  );
+
+  // Already onchain, so report that rather than attempt a second one.
+  if (row.identity_pda) {
+    return send(req, res, 200, {
+      registered: true,
+      alreadyRegistered: true,
+      package: name,
+      identityAddress: row.identity_pda,
+      signature: row.identity_tx,
+      cluster: config.solana.cluster,
+    });
+  }
+
+  if (!cluster.canRegister) {
+    return send(req, res, 503, {
+      registered: false,
+      reason: "awaiting_deployment",
+      blocker: cluster.blocker || "the program is not available on this cluster",
+    });
+  }
+  if (!registrar.configured()) {
+    return send(req, res, 503, {
+      registered: false,
+      reason: "no_registrar",
+      blocker: "this server has no registrar key, so it cannot sign a registration",
+    });
+  }
+
+  /* Which rule was satisfied, taken from the stored claim rather than
+     assumed. The program records it, so it has to be the truth. */
+  const claim = await store.claimView(name, current.user.id);
+  if (!claim || !claim.verified_at) {
+    throw forbidden("that package has not been verified, so it cannot be registered");
+  }
+  const verificationKind = claim.publish_proof
+    ? VERIFICATION_PUBLISH_PROOF
+    : VERIFICATION_REPO_AND_ATTESTATION;
+
+  const repo = await store.repositoryFor(name);
+  const attempt = await store.recordRegistrationAttempt({
+    packageName: name,
+    identityPda: derived.address,
+    programId: config.solana.programId,
+    cluster: config.solana.cluster,
+    authority: wallets[0].pubkey,
+  });
+
+  const result = await registrar.registerIdentity({
+    name,
+    owner: wallets[0].pubkey,
+    repoId: repo ? repo.github_id : 0,
+    repoFullName: repo ? repo.full_name : "",
+    publisherGithubId: current.user.github_id || 0,
+    verificationKind,
+  });
+
+  /* Persisted through the same path a reported signature would take, so one
+     place decides what "onchain" means. */
+  if (result.signature) await store.attachSignature(attempt.id, result.signature);
+  await store.applyReconciliation(attempt.id, name, {
+    status: "confirmed",
+    slot: null,
+  });
+
+  await store.audit("identity.registered", {
+    userId: current.user.id,
+    login: current.user.github_login || current.user.id,
+    subject: name,
+    detail: { address: result.identityAddress, signature: result.signature || null },
+  });
+
+  send(req, res, 201, {
+    registered: true,
+    alreadyRegistered: Boolean(result.alreadyRegistered),
+    package: name,
+    identityAddress: result.identityAddress,
+    signature: result.signature || null,
+    programId: result.programId,
+    cluster: result.cluster,
+    owner: wallets[0].pubkey,
+    registrar: result.registrar || registrar.publicKey(),
+    explorer: result.signature
+      ? `https://explorer.solana.com/tx/${result.signature}?cluster=${config.solana.cluster}`
+      : null,
+  });
 }
 
 module.exports = { status, forPackage, prepare, submitted, reconcile, register };
