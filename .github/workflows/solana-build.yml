@@ -26,7 +26,11 @@ permissions:
 env:
   SOLANA_VERSION: "1.18.26"
   ANCHOR_VERSION: "0.30.1"
-  RUST_VERSION: "1.79.0"
+  # 1.85, because the committed Cargo.lock pins toml_parser 1.1.3, which
+  # requires edition2024, and that is only stabilised from 1.85. Pinning the
+  # toolchain lower would mean editing the project's lockfile instead, which
+  # changes what the program is built against.
+  RUST_VERSION: "1.85.0"
 
 jobs:
   build:
