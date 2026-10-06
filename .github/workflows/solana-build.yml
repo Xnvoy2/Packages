@@ -70,11 +70,17 @@ jobs:
       # The program's own unit tests, which run on the host rather than SBF.
       - name: Rust tests
         working-directory: solana
-        run: cargo test --manifest-path programs/package_identity/Cargo.toml -- --nocapture
+        # From the workspace root and --locked, so the committed Cargo.lock is
+        # honoured. Pointing cargo at the program manifest instead re-resolves
+        # every transitive dependency to its newest version, which pulls in
+        # crates that now require edition2024 and will not build on this
+        # toolchain. The lock is what pins this program to versions it is
+        # known to compile against.
+        run: cargo test --locked -p package-identity -- --nocapture
 
       - name: Build the program
         working-directory: solana
-        run: anchor build
+        run: anchor build -- --locked
 
       # A build that "succeeds" without producing an object is not a build.
       - name: Verify the artifact
