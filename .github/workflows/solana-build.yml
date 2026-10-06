@@ -24,7 +24,11 @@ permissions:
   contents: read
 
 env:
-  SOLANA_VERSION: "1.18.26"
+  # 2.1.x, because cargo-build-sbf carries its own bundled Rust for the SBF
+  # target and the 1.18 one predates lockfile version 4, which this project's
+  # Cargo.lock uses. Bumping the toolchain reads the existing lock; pinning
+  # lower would mean regenerating the project's lockfile to suit the builder.
+  SOLANA_VERSION: "2.1.21"
   ANCHOR_VERSION: "0.30.1"
   # Two toolchains, because the two halves want different compilers.
   # Anchor CLI 0.30.1 pulls an old "time" that fails to compile on 1.85
