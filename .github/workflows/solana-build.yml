@@ -116,21 +116,20 @@ jobs:
           echo "SIZE: $(stat -c%s "$SO") bytes"
           echo "SHA256: $(sha256sum "$SO" | cut -d' ' -f1)"
 
-      # What the compiled program believes its own address is, read back from
-      # the IDL rather than trusted from the source.
+      # What the compiled program believes its own address is, read back out of
+      # the object rather than trusted from the source it was built from.
       - name: Verify the embedded program id
         working-directory: solana
         run: |
           EXPECTED="HbA6Kn3SsXbs1KyM8qJHHWQjXLuAGoPXW7upsNp9k8aP"
-          echo "declared in source:"
-          grep -o 'declare_id' -A 0 programs/package_identity/src/lib.rs | head -1
-          grep -c "$EXPECTED" programs/package_identity/src/lib.rs
-          # The id is embedded in the object as plain base58 text, so it can be
-          # read back out of the build rather than taken on trust from the
-          # source it was built from.
-          if strings target/deploy/package_identity.so | grep -qF "$EXPECTED"; then
+          # declare_id! stores the key as 32 raw bytes, not as base58 text, so
+          # the object is searched for those bytes. Looking for the base58
+          # string finds nothing however correct the build is.
+          EXPECTED_HEX="f67b04b90631bd1ad6e6101ee29fe89bb1fb61d396e82ff657de24e55ba27064"
+          echo "declared in source: $(grep -c "$EXPECTED" programs/package_identity/src/lib.rs) occurrence(s)"
+          if xxd -p target/deploy/package_identity.so | tr -d '\n' | grep -qF "$EXPECTED_HEX"; then
             echo "BINARY-ID MATCH: PASS"
-            echo "  $EXPECTED found inside the compiled object"
+            echo "  $EXPECTED is embedded in the compiled object"
           else
             echo "BINARY-ID MATCH: FAIL"
             echo "  $EXPECTED is not present in the compiled object"
